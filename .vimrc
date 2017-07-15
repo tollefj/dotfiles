@@ -39,6 +39,10 @@ inoremap <C-e> <C-n>
 nnoremap <C-n> :NERDTreeToggle<CR>
 " **** ALL MAPPINGS ABOVE ****
 
+
+
+
+
 " **** ALL SET MODIFIERS BELOW ****
 " automatically resize windows 
 autocmd VimResized * wincmd =
@@ -70,6 +74,9 @@ set clipboard=unnamed
 let g:Powerline_symbols = 'fancy'
 " **** ALL SET MODIFIERS ABOVE ****
 
+
+
+
 " **** THEMING BELOW ****
 
 "if has('gui_running')
@@ -81,6 +88,8 @@ let g:Powerline_symbols = 'fancy'
 " Press F5 to change between solarized dark/light
 " call togglebg#map("<F5>")
 " **** THEMING ABOVE ****
+
+
 
 " **** PYTHON STUFF BELOW ****
 set encoding=utf-8
