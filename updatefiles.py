@@ -32,7 +32,7 @@ def creation_date(f, pretty=False):
 
 
 def is_newer(f1, f2):
-    return creation_date(f1) > creation_date(f2)
+    return creation_date(f1) > creation_date(f2)-100
 
 
 def verify_copy(f1, f2):

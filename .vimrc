@@ -8,14 +8,14 @@ Plugin 'gmarik/Vundle.vim'
 " add plugins below
 Plugin 'tmhedberg/SimpylFold'
 Plugin 'scrooloose/syntastic'
-"Plugin 'nvie/vim-flake8'
 Plugin 'jnurmine/Zenburn'
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'scrooloose/nerdtree'
-" Plugin 'kien/ctrlp.vim'
 Plugin 'powerline/powerline', {'rtp': 'powerline/bindings/vim/'}
 Plugin 'Vimjas/vim-python-pep8-indent'
 Plugin 'kh3phr3n/python-syntax'
+"Plugin 'kien/ctrlp.vim'
+"Plugin 'nvie/vim-flake8'
 
 call vundle#end()
 filetype plugin indent on
@@ -57,8 +57,8 @@ set hlsearch
 syntax on
 
 " Statusline formatting
-set statusline=%F%m%r%h%w\ [TYPE=%Y\ %{&ff}]\
-  \ [%l/%L\ (%p%%)
+" set statusline=%F%m%r%h%w\ [TYPE=%Y\ %{&ff}]\
+"  \ [%l/%L\ (%p%%)
 
 " always show status line
 set laststatus=2
@@ -72,6 +72,7 @@ set backspace=indent,eol,start
 
 " Line numbers
 set nu
+set relativenumber
 " Copy from VIM and outside
 set clipboard=unnamed
 
