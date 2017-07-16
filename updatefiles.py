@@ -3,13 +3,18 @@
 # Also load from ~/ when needed
 # Use os.path.getmtime(path) to compare
 # https://stackoverflow.com/a/39501288/4727450
+#
+# THIS FILE IS DESIGNED STRICTLY FOR MAC OS
 
 import os
 import time
 import shutil
+import subprocess
+
 
 dot_files = ['.vimrc', '.gitconfig', '.bash_profile']
-dot_dir = os.path.join('/Users', 'tollef')
+user = os.environ.get('USER')
+dot_dir = os.path.join('/Users', user)
 git_dir = os.getcwd()
 
 
@@ -34,21 +39,41 @@ def verify_copy(f1, f2):
     return c1 - 100 < c2 < c1 + 100
 
 
+class Git:
+    def call(self, fn):
+        print('Calling git '+fn)
+        subprocess.call('git '+fn, shell=True)
+    def pull(self):
+        self.call('pull')
+    def push(self):
+        self.call('push')
+    def commit(self):
+        timestamp = time.strftime('%H:%m - %d/%m/%y')
+        fn = 'commit -am "Automated commit at '+timestamp+'"'
+        self.call(fn)
+
+
 def main():
+    git = Git()
+    git.pull()
+    files_updated_in_repo = False
     for f in dot_files:
         print('Checking ' + f)
         repo_file = os.path.join(git_dir, f)
         local_file = os.path.join(dot_dir, f)
         local_outdated = is_newer(repo_file, local_file)
-        print()
         if local_outdated:
-            print('Local file outdated! Copy from git repo to ~/')
+            print('Local outdated! Copying from repo to ~/')
             shutil.copy2(repo_file, local_file)
         else:
-            print('Repo file outdated! Copy files from ~/ to repo')
+            print('Repo outdated! Copying from ~/ to repo')
+            files_updated_in_repo = True
             shutil.copy2(local_file, repo_file)
         if verify_copy(repo_file, local_file):
             print('Successfully copied ' + f)
+    if files_updated_in_repo:
+        git.commit()
+        git.push()
 
 
 if __name__ == '__main__':
