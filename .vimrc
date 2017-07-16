@@ -22,6 +22,8 @@ filetype plugin indent on
 
 
 " **** ALL MAPPINGS BELOW ****
+" Mark replacement
+noremap t `
 
 " Select all with Ctrl-A
 noremap <C-a> <esc>gg0vG$<CR>
