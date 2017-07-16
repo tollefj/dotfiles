@@ -54,7 +54,7 @@ class Git:
 
     def commit(self):
         if not self.nothing_to_commit():
-            timestamp = time.strftime('%H:%m - %d/%m/%y')
+            timestamp = time.strftime('%H:%M - %d/%m/%y')
             fn = 'commit -am "Automated commit at '+timestamp+'"'
             self.call(fn)
             self.push()
