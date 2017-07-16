@@ -1,10 +1,12 @@
-# Copy .vimrc, .gitconfig and .bash_profile
-# Paste them in their proper ~/ dir
-# Also load from ~/ when needed
-# Use os.path.getmtime(path) to compare
+# Sources:
 # https://stackoverflow.com/a/39501288/4727450
 #
-# THIS FILE IS DESIGNED STRICTLY FOR MAC OS
+# Info:
+# Makes sure that local and repo dotfiles are updated
+#
+# THIS FILE IS DESIGNED FOR MAC OS
+# To change to any other OS, modify the paths and user script.
+
 
 import os
 import time
@@ -43,10 +45,13 @@ class Git:
     def call(self, fn):
         print('Calling git '+fn)
         subprocess.call('git '+fn, shell=True)
+
     def pull(self):
         self.call('pull')
+
     def push(self):
         self.call('push')
+
     def commit(self):
         timestamp = time.strftime('%H:%m - %d/%m/%y')
         fn = 'commit -am "Automated commit at '+timestamp+'"'
