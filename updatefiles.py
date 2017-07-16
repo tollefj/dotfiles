@@ -1,8 +1,8 @@
 # Sources:
-# https://stackoverflow.com/a/39501288/4727450
+# https://stackoverflow.com/a/39501288/4727450 (file modification time)
 #
 # Info:
-# Makes sure that local and repo dotfiles are updated
+# Ensures that local and repo dotfiles are updated
 #
 # THIS FILE IS DESIGNED FOR MAC OS
 # To change to any other OS, modify the paths and user script.
@@ -38,6 +38,8 @@ def is_newer(f1, f2):
 def verify_copy(f1, f2):
     c1 = creation_date(f1)
     c2 = creation_date(f2)
+    # creation date returns a timestamp in ms
+    # a buffer of +/- 100 is needed to ever return True.
     return c1 - 100 < c2 < c1 + 100
 
 
@@ -69,7 +71,7 @@ class Git:
 def main():
     git = Git()
     git.pull()
-    files_updated_in_repo = False
+    files_to_update = False
     for f in dot_files:
         print('Checking ' + f)
         repo_file = os.path.join(git_dir, f)
@@ -80,11 +82,11 @@ def main():
             shutil.copy2(repo_file, local_file)
         else:
             print('Repo outdated! Copying from ~/ to repo')
-            files_updated_in_repo = True
+            files_to_update = True
             shutil.copy2(local_file, repo_file)
         if verify_copy(repo_file, local_file):
             print('Successfully copied ' + f)
-    if files_updated_in_repo:
+    if files_to_update:
         git.commit()
 
 
