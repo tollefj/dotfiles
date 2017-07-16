@@ -56,6 +56,10 @@ set splitright
 set hlsearch
 syntax on
 
+" Statusline formatting
+set statusline=%F%m%r%h%w\ [TYPE=%Y\ %{&ff}]\
+  \ [%l/%L\ (%p%%)
+
 " always show status line
 set laststatus=2
 
@@ -93,6 +97,10 @@ let g:Powerline_symbols = 'fancy'
 
 " **** PYTHON STUFF BELOW ****
 set encoding=utf-8
+
+au FileType py set autoindent
+au FileType py set smartindent
+au FileType py set textwidth=79 " PEP-8 Friendly
 
 " ignore .pyc files in nerdtree
 let NERDTreeIgnore=['\.pyc$', '\~$'] 

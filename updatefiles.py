@@ -53,9 +53,17 @@ class Git:
         self.call('push')
 
     def commit(self):
-        timestamp = time.strftime('%H:%m - %d/%m/%y')
-        fn = 'commit -am "Automated commit at '+timestamp+'"'
-        self.call(fn)
+        if not self.nothing_to_commit():
+            timestamp = time.strftime('%H:%m - %d/%m/%y')
+            fn = 'commit -am "Automated commit at '+timestamp+'"'
+            self.call(fn)
+            self.push()
+        else:
+            print('Nothing to commit - Do not push')
+
+    def nothing_to_commit(self):
+        st = subprocess.check_output(['git', 'status'])
+        return 'nothing to commit' in str(st)
 
 
 def main():
@@ -78,7 +86,6 @@ def main():
             print('Successfully copied ' + f)
     if files_updated_in_repo:
         git.commit()
-        git.push()
 
 
 if __name__ == '__main__':
