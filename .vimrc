@@ -14,11 +14,14 @@ Plugin 'scrooloose/nerdtree'
 Plugin 'powerline/powerline', {'rtp': 'powerline/bindings/vim/'}
 Plugin 'Vimjas/vim-python-pep8-indent'
 Plugin 'kh3phr3n/python-syntax'
+Plugin 'tell-k/vim-autopep8'
+Plugin 'scrooloose/nerdcommenter'
 "Plugin 'kien/ctrlp.vim'
 "Plugin 'nvie/vim-flake8'
 
 call vundle#end()
 filetype plugin indent on
+filetype plugin on
 
 
 " **** ALL MAPPINGS BELOW ****
@@ -49,6 +52,8 @@ nnoremap <C-n> :NERDTreeToggle<CR>
 " automatically resize windows 
 autocmd VimResized * wincmd =
 
+let mapleader = ","
+
 set showcmd
 
 set splitbelow
@@ -58,11 +63,7 @@ set splitright
 set hlsearch
 syntax on
 
-" Statusline formatting
-" set statusline=%F%m%r%h%w\ [TYPE=%Y\ %{&ff}]\
-"  \ [%l/%L\ (%p%%)
-
-" always show status line
+" always show status line, also used for powerline
 set laststatus=2
 
 " Enable code folding
@@ -74,7 +75,7 @@ set backspace=indent,eol,start
 
 " Line numbers
 set nu
-set relativenumber
+" set relativenumber
 " Copy from VIM and outside
 set clipboard=unnamed
 
@@ -85,6 +86,8 @@ let g:Powerline_symbols = 'fancy'
 
 
 " **** THEMING BELOW ****
+"colorscheme vim-material
+"let g:airline_theme='material'
 
 "if has('gui_running')
 " set background=dark
@@ -108,8 +111,7 @@ au FileType py set textwidth=79 " PEP-8 Friendly
 " ignore .pyc files in nerdtree
 let NERDTreeIgnore=['\.pyc$', '\~$'] 
 
-" Run flake8 upon saving .py files
-" autocmd BufWritePost *.py call Flake8()
-
 let python_highlight_all=1
+
+autocmd FileType python noremap <buffer> <F8> :call Autopep8()<CR>
 " **** PYTHON STUFF ABOVE ****
