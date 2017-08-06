@@ -11,6 +11,9 @@ alias py3virtual='virtualenv -p python3 venv; source venv/bin/activate'
 alias bashprof='vim ~/.bash_profile'
 alias vimrc='vim ~/.vimrc'
 
+alias ipconfig='ifconfig | grep inet'
+alias updatedots='py3 ~/Documents/Git/dotfiles/updatefiles.py'
+
 export CLICOLOR=1
 export LSCOLORS=GxFxCxDxBxegedabagaced
 

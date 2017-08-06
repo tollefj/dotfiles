@@ -17,7 +17,9 @@ import subprocess
 dot_files = ['.vimrc', '.gitconfig', '.bash_profile']
 user = os.environ.get('USER')
 dot_dir = os.path.join('/Users', user)
-git_dir = os.getcwd()
+# modify git_dir if you want to run this outside the git directory
+git_dir = os.path.join(os.getcwd(), 'Documents', 'Git', 'dotfiles')
+os.chdir(git_dir)
 
 
 def creation_date(f, pretty=False):
@@ -68,6 +70,15 @@ class Git:
         return 'nothing to commit' in str(st)
 
 
+def cp(_from, _to):
+    try:
+        print('Copying from ' + _from + ' to ' + _to)
+        shutil.copy2(_from, _to)
+    except shutil.SameFileError as e:
+        print('Same file!')
+        print(e)
+
+
 def main():
     git = Git()
     git.pull()
@@ -79,11 +90,11 @@ def main():
         local_outdated = is_newer(repo_file, local_file)
         if local_outdated:
             print('Local outdated! Copying from repo to ~/')
-            shutil.copy2(repo_file, local_file)
+            cp(repo_file, local_file)
         else:
             print('Repo outdated! Copying from ~/ to repo')
             files_to_update = True
-            shutil.copy2(local_file, repo_file)
+            cp(local_file, repo_file)
         if verify_copy(repo_file, local_file):
             print('Successfully copied ' + f)
     if files_to_update:
