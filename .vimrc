@@ -16,7 +16,7 @@ Plugin 'Vimjas/vim-python-pep8-indent'
 Plugin 'kh3phr3n/python-syntax'
 Plugin 'tell-k/vim-autopep8'
 Plugin 'scrooloose/nerdcommenter'
-"Plugin 'kien/ctrlp.vim'
+Plugin 'kien/ctrlp.vim'
 "Plugin 'nvie/vim-flake8'
 
 call vundle#end()
@@ -83,6 +83,9 @@ set nu
 set clipboard=unnamed
 
 let g:Powerline_symbols = 'fancy'
+
+" Always CTRLP to root dir
+let g:ctrlp_root_markers = ['.ctrlp']
 
 " Add spaces after comment delimiters by default
 let g:NERDSpaceDelims = 1
