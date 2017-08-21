@@ -49,6 +49,8 @@ nnoremap <C-n> :NERDTreeToggle<CR>
 
 
 " **** ALL SET MODIFIERS BELOW ****
+:nnoremap gr :grep '\b<cword>\b' *<CR>
+:nnoremap GR :grep '\b<cword>\b' %:p:h/*<CR>
 " automatically resize windows 
 autocmd VimResized * wincmd =
 
@@ -85,7 +87,7 @@ set clipboard=unnamed
 let g:Powerline_symbols = 'fancy'
 
 " Always CTRLP to root dir
-let g:ctrlp_root_markers = ['.ctrlp']
+" let g:ctrlp_root_markers = ['.ctrlp']
 
 " Add spaces after comment delimiters by default
 let g:NERDSpaceDelims = 1
