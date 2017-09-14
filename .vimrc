@@ -17,6 +17,10 @@ Plugin 'kh3phr3n/python-syntax'
 Plugin 'tell-k/vim-autopep8'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'kien/ctrlp.vim'
+Plugin 'pangloss/vim-javascript'
+Plugin 'mxw/vim-jsx'
+" Plugin 'flazz/vim-colorschemes'
+
 "Plugin 'nvie/vim-flake8'
 
 call vundle#end()
@@ -49,6 +53,8 @@ nnoremap <C-n> :NERDTreeToggle<CR>
 
 
 " **** ALL SET MODIFIERS BELOW ****
+set tabstop=4
+set shiftwidth=4
 :nnoremap gr :grep '\b<cword>\b' *<CR>
 :nnoremap GR :grep '\b<cword>\b' %:p:h/*<CR>
 " automatically resize windows 
@@ -109,26 +115,25 @@ let g:NERDCommentEmptyLines = 1
 
 " Enable trimming of trailing whitespace when uncommenting
 let g:NERDTrimTrailingWhitespace = 1
+
+" React syntax on js files
+let g:jsx_ext_required = 0
 " **** ALL SET MODIFIERS ABOVE ****
 
 
 
 
 " **** THEMING BELOW ****
-"colorscheme vim-material
-"let g:airline_theme='material'
-
-"if has('gui_running')
-" set background=dark
-" colorscheme solarized
-"else
-" colorscheme zenburn
-"endif
-" Press F5 to change between solarized dark/light
-" call togglebg#map("<F5>")
+" set background=light
+" colorscheme = minimal
 " **** THEMING ABOVE ****
 
-
+" **** CUSTOM FUNCTIONS ****
+function Find(x)
+    echom "Searching for"
+    echom x
+    grep -H -r x * | less
+endfunction
 
 " **** PYTHON STUFF BELOW ****
 set encoding=utf-8

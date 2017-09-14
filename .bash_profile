@@ -13,6 +13,7 @@ alias vimrc='vim ~/.vimrc'
 
 alias ipconfig='ifconfig | grep inet'
 alias updatedots='py3 ~/Documents/Git/dotfiles/updatefiles.py'
+alias docs='cd Documents/Git'
 
 export CLICOLOR=1
 export LSCOLORS=GxFxCxDxBxegedabagaced
