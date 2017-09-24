@@ -26,7 +26,10 @@ Plugin 'mxw/vim-jsx'
 call vundle#end()
 filetype plugin indent on
 filetype plugin on
-
+set complete=.,b,u,]
+set wildmode=longest,list:longest
+set completeopt=menu,preview
+set omnifunc=syntaxcomplete#Complete
 
 " **** ALL MAPPINGS BELOW ****
 " Mark replacement
@@ -64,8 +67,8 @@ let mapleader = ","
 
 set showcmd
 
-autocmd FileType python setlocal colorcolumn=79
-autocmd FileType java setlocal colorcolumn=99
+" autocmd FileType python setlocal colorcolumn=79
+" autocmd FileType java setlocal colorcolumn=99
 
 set splitbelow
 set splitright
@@ -93,7 +96,7 @@ set clipboard=unnamed
 let g:Powerline_symbols = 'fancy'
 
 " Always CTRLP to root dir
-" let g:ctrlp_root_markers = ['.ctrlp']
+let g:ctrlp_root_markers = ['.ctrlp']
 
 " Add spaces after comment delimiters by default
 let g:NERDSpaceDelims = 1
@@ -116,11 +119,17 @@ let g:NERDCommentEmptyLines = 1
 " Enable trimming of trailing whitespace when uncommenting
 let g:NERDTrimTrailingWhitespace = 1
 
-" React syntax on js files
-let g:jsx_ext_required = 0
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+let g:ycm_python_binary_path = 'python3'
 " **** ALL SET MODIFIERS ABOVE ****
-
-
 
 
 " **** THEMING BELOW ****
@@ -149,3 +158,10 @@ let python_highlight_all=1
 
 autocmd FileType python noremap <buffer> <F8> :call Autopep8()<CR>
 " **** PYTHON STUFF ABOVE ****
+"
+" *** JS below ***
+" React syntax on js files
+let g:jsx_ext_required = 0
+" javascript stuff
+let g:javascript_plugin_jsdoc = 1
+let g:javascript_plugin_flow = 1
