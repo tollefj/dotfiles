@@ -19,6 +19,7 @@ Plugin 'scrooloose/nerdcommenter'
 Plugin 'kien/ctrlp.vim'
 Plugin 'pangloss/vim-javascript'
 Plugin 'mxw/vim-jsx'
+Plugin 'alvan/vim-closetag'
 " Plugin 'flazz/vim-colorschemes'
 
 "Plugin 'nvie/vim-flake8'
@@ -56,8 +57,10 @@ nnoremap <C-n> :NERDTreeToggle<CR>
 
 
 " **** ALL SET MODIFIERS BELOW ****
-set tabstop=4
-set shiftwidth=4
+set tabstop=2
+set shiftwidth=2
+set expandtab
+
 :nnoremap gr :grep '\b<cword>\b' *<CR>
 :nnoremap GR :grep '\b<cword>\b' %:p:h/*<CR>
 " automatically resize windows 
@@ -128,7 +131,28 @@ let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 
-let g:ycm_python_binary_path = 'python3'
+" filenames like *.xml, *.html, *.xhtml, ...
+" Then after you press <kbd>&gt;</kbd> in these files, this plugin will try to close the current tag.
+"
+let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.js,*.jsx,*.ejs'
+
+" filenames like *.xml, *.xhtml, ...
+" This will make the list of non closing tags self closing in the specified files.
+"
+let g:closetag_xhtml_filenames = '*.html,*.xhtml,*.phtml,*.js,*.jsx,*.ejs'
+
+" integer value [0|1]
+" This will make the list of non closing tags case sensitive (e.g. `<Link>` will be closed while `<link>` won't.)
+"
+let g:closetag_emptyTags_caseSensitive = 1
+
+" Shortcut for closing tags, default is '>'
+"
+let g:closetag_shortcut = '>'
+
+" Add > at current position without closing the current tag, default is ''
+"
+let g:closetag_close_shortcut = '<leader>>'
 " **** ALL SET MODIFIERS ABOVE ****
 
 
@@ -157,6 +181,7 @@ let NERDTreeIgnore=['\.pyc$', '\~$']
 let python_highlight_all=1
 
 autocmd FileType python noremap <buffer> <F8> :call Autopep8()<CR>
+" autocmd Filetype javascript setlocal ts=2 sw=2 sts=0 expandtab
 " **** PYTHON STUFF ABOVE ****
 "
 " *** JS below ***
