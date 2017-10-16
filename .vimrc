@@ -31,6 +31,8 @@ set complete=.,b,u,]
 set wildmode=longest,list:longest
 set completeopt=menu,preview
 set omnifunc=syntaxcomplete#Complete
+set autoread
+au FocusGained,BufEnter * checktime
 
 " **** ALL MAPPINGS BELOW ****
 " Mark replacement
