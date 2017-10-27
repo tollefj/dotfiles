@@ -20,6 +20,9 @@ Plugin 'kien/ctrlp.vim'
 Plugin 'pangloss/vim-javascript'
 Plugin 'mxw/vim-jsx'
 Plugin 'alvan/vim-closetag'
+Plugin 'tpope/vim-surround'
+Plugin 'leafgarland/typescript-vim'
+Plugin 'Quramy/vim-js-pretty-template'
 " Plugin 'flazz/vim-colorschemes'
 
 "Plugin 'nvie/vim-flake8'
@@ -33,6 +36,10 @@ set completeopt=menu,preview
 set omnifunc=syntaxcomplete#Complete
 set autoread
 au FocusGained,BufEnter * checktime
+if has('persistent_undo')      "check if your vim version supports it
+  set undofile                 "turn on the feature  
+  set undodir=$HOME/.vim/undo  "directory where the undo files will be stored
+  endif     
 
 " **** ALL MAPPINGS BELOW ****
 " Mark replacement
@@ -132,7 +139,9 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
-
+let g:syntastic_mode_map = {
+    \ "mode": "active",
+    \ "passive_filetypes": ["html"] }
 " filenames like *.xml, *.html, *.xhtml, ...
 " Then after you press <kbd>&gt;</kbd> in these files, this plugin will try to close the current tag.
 "
@@ -192,3 +201,13 @@ let g:jsx_ext_required = 0
 " javascript stuff
 let g:javascript_plugin_jsdoc = 1
 let g:javascript_plugin_flow = 1
+
+" angular / typescript "
+let g:typescript_compiler_binary = 'tsc'
+let g:typescript_compiler_options = ''
+autocmd QuickFixCmdPost [^l]* nested cwindow
+autocmd QuickFixCmdPost    l* nested lwindow
+autocmd FileType typescript JsPreTmpl html
+autocmd FileType typescript syn clear foldBraces
+let g:tsuquyomi_disable_quickfix = 1
+let g:syntastic_typescript_checkers = ['tsuquyomi'] 
