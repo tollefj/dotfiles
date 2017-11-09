@@ -24,12 +24,17 @@ Plugin 'tpope/vim-surround'
 Plugin 'leafgarland/typescript-vim'
 Plugin 'Quramy/vim-js-pretty-template'
 " Plugin 'flazz/vim-colorschemes'
-
 "Plugin 'nvie/vim-flake8'
 
 call vundle#end()
 filetype plugin indent on
 filetype plugin on
+
+" **** THEMING BELOW ****
+" set background=light
+colorscheme cherry
+" **** THEMING ABOVE ****
+
 set complete=.,b,u,]
 set wildmode=longest,list:longest
 set completeopt=menu,preview
@@ -135,10 +140,12 @@ set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 
+let g:syntastic_error_symbol = "😡"
+let g:syntastic_warning_symbol = "👉"
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
+let g:syntastic_check_on_w = 0
 let g:syntastic_mode_map = {
     \ "mode": "active",
     \ "passive_filetypes": ["html"] }
@@ -166,11 +173,6 @@ let g:closetag_shortcut = '>'
 let g:closetag_close_shortcut = '<leader>>'
 " **** ALL SET MODIFIERS ABOVE ****
 
-
-" **** THEMING BELOW ****
-" set background=light
-" colorscheme = minimal
-" **** THEMING ABOVE ****
 
 " **** CUSTOM FUNCTIONS ****
 function Find(x)
