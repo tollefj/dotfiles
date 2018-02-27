@@ -1,6 +1,5 @@
 export PATH="/usr/local/bin:$PATH"
 export PS1="\[\e[31;1m\]\W \\[\e[32;1m\]"
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session as a function
 alias showFiles='defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app'
 alias hideFiles='defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app'
 alias la='ls -a'
@@ -31,3 +30,5 @@ export NVM_DIR="$HOME/.nvm"
   . "/usr/local/opt/nvm/nvm.sh"
 export ANDROID_HOME=/usr/local/Caskroom/android-sdk
 source ~/.profile
+
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*

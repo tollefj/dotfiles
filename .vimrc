@@ -1,38 +1,54 @@
-set nocompatible
-filetype off
+""" Plug installation
 
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-
-Plugin 'gmarik/Vundle.vim'
-" add plugins below
-Plugin 'tmhedberg/SimpylFold'
-Plugin 'scrooloose/syntastic'
-Plugin 'jnurmine/Zenburn'
-Plugin 'altercation/vim-colors-solarized'
-Plugin 'scrooloose/nerdtree'
-Plugin 'powerline/powerline', {'rtp': 'powerline/bindings/vim/'}
-Plugin 'Vimjas/vim-python-pep8-indent'
-Plugin 'kh3phr3n/python-syntax'
-Plugin 'tell-k/vim-autopep8'
-Plugin 'scrooloose/nerdcommenter'
-Plugin 'kien/ctrlp.vim'
-Plugin 'pangloss/vim-javascript'
-Plugin 'mxw/vim-jsx'
-Plugin 'alvan/vim-closetag'
-Plugin 'tpope/vim-surround'
-Plugin 'leafgarland/typescript-vim'
-Plugin 'Quramy/vim-js-pretty-template'
-" Plugin 'flazz/vim-colorschemes'
-"Plugin 'nvie/vim-flake8'
-
-call vundle#end()
+call plug#begin('~/.vim/plugged')
 filetype plugin indent on
-filetype plugin on
 
+" Syntax
+Plug 'tmhedberg/SimpylFold'
+Plug 'scrooloose/syntastic'
+Plug 'Vimjas/vim-python-pep8-indent'
+Plug 'kh3phr3n/python-syntax'
+Plug 'tell-k/vim-autopep8'
+Plug 'pangloss/vim-javascript'
+Plug 'leafgarland/typescript-vim'
+Plug 'Quramy/vim-js-pretty-template'
+Plug 'mxw/vim-jsx'
+" Functionality
+Plug 'scrooloose/nerdtree'
+Plug 'powerline/powerline', {'rtp': 'powerline/bindings/vim/'}
+Plug 'scrooloose/nerdcommenter'
+Plug 'alvan/vim-closetag'
+Plug 'tpope/vim-surround' 
+" Search
+Plug 'kien/ctrlp.vim'
+Plug 'artur-shaik/vim-javacomplete2'
+" Theming
+call plug#end()
+
+""" Auto Installation
+  if empty(glob("~/.vim/autoload/plug.vim"))
+    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+          \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    auto VimEnter * PlugInstall
+  endif
+
+  if !empty(glob("~/.fzf/bin/fzf"))
+    if empty(glob("~/.fzf/bin/rg"))
+      silent !curl -fLo /tmp/rg.tar.gz
+            \ https://github.com/BurntSushi/ripgrep/releases/download/0.4.0/ripgrep-0.4.0-x86_64-unknown-linux-musl.tar.gz
+      silent !tar xzvf /tmp/rg.tar.gz --directory /tmp
+      silent !cp /tmp/ripgrep-0.4.0-x86_64-unknown-linux-musl/rg ~/.fzf/bin/rg
+    endif
+  endif
+  
+  if !isdirectory($HOME . "/.vim/undodir")
+    call mkdir($HOME . "/.vim/undodir", "p")
+  endif
+
+""" Appearance
 " **** THEMING BELOW ****
 " set background=light
-colorscheme cherry
+" colorscheme "material.vim"
 " **** THEMING ABOVE ****
 
 set complete=.,b,u,]
@@ -65,10 +81,6 @@ inoremap <C-e> <C-n>
 
 nnoremap <C-n> :NERDTreeToggle<CR>
 " **** ALL MAPPINGS ABOVE ****
-
-
-
-
 
 " **** ALL SET MODIFIERS BELOW ****
 set tabstop=2
@@ -112,8 +124,17 @@ set clipboard=unnamed
 
 let g:Powerline_symbols = 'fancy'
 
+" CTRLP
 " Always CTRLP to root dir
 let g:ctrlp_root_markers = ['.ctrlp']
+let g:ctrlp_working_path_mode = 'ra'
+" Ignore some folders and files for CtrlP indexing
+let g:ctrlp_custom_ignore = {
+  \ 'dir':  '\.git$\|\.yardoc\|node_modules\|log\|tmp$',
+  \ 'file': '\.so$\|\.dat$|\.DS_Store$'
+  \ }
+" set wildignore+=*/tmp/*,*.so,*.swp,*.zip
+" let g:ctrlp_user_command = 'find %s -type f'
 
 " Add spaces after comment delimiters by default
 let g:NERDSpaceDelims = 1
@@ -136,11 +157,12 @@ let g:NERDCommentEmptyLines = 1
 " Enable trimming of trailing whitespace when uncommenting
 let g:NERDTrimTrailingWhitespace = 1
 
+
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 
-let g:syntastic_error_symbol = "😡"
+let g:syntastic_error_symbol = "👉"
 let g:syntastic_warning_symbol = "👉"
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
@@ -196,20 +218,14 @@ let python_highlight_all=1
 autocmd FileType python noremap <buffer> <F8> :call Autopep8()<CR>
 " autocmd Filetype javascript setlocal ts=2 sw=2 sts=0 expandtab
 " **** PYTHON STUFF ABOVE ****
-"
-" *** JS below ***
-" React syntax on js files
-let g:jsx_ext_required = 0
-" javascript stuff
-let g:javascript_plugin_jsdoc = 1
-let g:javascript_plugin_flow = 1
 
-" angular / typescript "
-let g:typescript_compiler_binary = 'tsc'
-let g:typescript_compiler_options = ''
-autocmd QuickFixCmdPost [^l]* nested cwindow
-autocmd QuickFixCmdPost    l* nested lwindow
-autocmd FileType typescript JsPreTmpl html
-autocmd FileType typescript syn clear foldBraces
-let g:tsuquyomi_disable_quickfix = 1
-let g:syntastic_typescript_checkers = ['tsuquyomi'] 
+" *** JAVA ***
+autocmd FileType java setlocal omnifunc=javacomplete#Complete
+nmap <F4> <Plug>(JavaComplete-Imports-AddSmart)
+imap <F4> <Plug>(JavaComplete-Imports-AddSmart)
+nmap <F6> <Plug>(JavaComplete-Imports-AddMissing)
+imap <F6> <Plug>(JavaComplete-Imports-AddMissing)
+map <F7> <Plug>(JavaComplete-Imports-RemoveUnused)
+imap <F7> <Plug>(JavaComplete-Imports-RemoveUnused)
+
+
