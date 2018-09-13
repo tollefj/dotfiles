@@ -9,10 +9,12 @@ Plug 'scrooloose/syntastic'
 Plug 'Vimjas/vim-python-pep8-indent'
 Plug 'kh3phr3n/python-syntax'
 Plug 'tell-k/vim-autopep8'
+Plug 'aanari/vim-tsx-pretty'
 Plug 'pangloss/vim-javascript'
 Plug 'leafgarland/typescript-vim'
 Plug 'Quramy/vim-js-pretty-template'
 Plug 'mxw/vim-jsx'
+Plug 'posva/vim-vue'
 " Functionality
 Plug 'scrooloose/nerdtree'
 Plug 'powerline/powerline', {'rtp': 'powerline/bindings/vim/'}
@@ -124,6 +126,11 @@ set clipboard=unnamed
 
 let g:Powerline_symbols = 'fancy'
 
+" typescript stuff
+let g:typescript_indent_disable = 1
+let g:typescript_compiler_binary = 'tsc'
+let g:typescript_compiler_options = ''
+
 " CTRLP
 " Always CTRLP to root dir
 let g:ctrlp_root_markers = ['.ctrlp']
@@ -158,12 +165,17 @@ let g:NERDCommentEmptyLines = 1
 let g:NERDTrimTrailingWhitespace = 1
 
 
+" Typescript and jsx
+let g:vim_jsx_pretty_enable_jsx_highlight = 1
+let g:vim_jsx_pretty_colorful_config = 1
+
+
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 
 let g:syntastic_error_symbol = "👉"
-let g:syntastic_warning_symbol = "😡"
+let g:syntastic_warning_symbol = "🔥"
 let g:syntastic_always_populate_loc_list = 0
 let g:syntastic_auto_loc_list = 0
 let g:syntastic_check_on_open = 0
@@ -175,12 +187,12 @@ let g:syntastic_mode_map = {
 " filenames like *.xml, *.html, *.xhtml, ...
 " Then after you press <kbd>&gt;</kbd> in these files, this plugin will try to close the current tag.
 "
-let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.js,*.jsx,*.ejs'
+let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.js,*.jsx,*.ejs,*.ts,*.tsx'
 
 " filenames like *.xml, *.xhtml, ...
 " This will make the list of non closing tags self closing in the specified files.
 "
-let g:closetag_xhtml_filenames = '*.html,*.xhtml,*.phtml,*.js,*.jsx,*.ejs'
+let g:closetag_xhtml_filenames = '*.html,*.xhtml,*.phtml,*.js,*.jsx,*.ejs,*.ts,*.tsx'
 
 " integer value [0|1]
 " This will make the list of non closing tags case sensitive (e.g. `<Link>` will be closed while `<link>` won't.)
@@ -213,6 +225,7 @@ au FileType py set textwidth=79 " PEP-8 Friendly
 
 " ignore .pyc files in nerdtree
 let NERDTreeIgnore=['\.pyc$', '\~$'] 
+let NERDTreeShowHidden=1
 
 let python_highlight_all=1
 
