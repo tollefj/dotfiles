@@ -21,8 +21,7 @@ Plug 'scrooloose/nerdcommenter'
 Plug 'alvan/vim-closetag'
 Plug 'tpope/vim-surround' 
 " Search
-" Plug 'kien/ctrlp.vim'
-Plug 'vim-ctrlspace/vim-ctrlspace'
+Plug 'kien/ctrlp.vim'
 " Plug 'artur-shaik/vim-javacomplete2'
 " Theming
 Plug 'vim-airline/vim-airline'
@@ -52,6 +51,15 @@ call plug#end()
 " **** THEMING BELOW ****
 " set background=light
 " colorscheme "material.vim"
+
+" Enable completion where available.
+" This setting must be set before ALE is loaded.
+" You should not turn this setting on if you wish to use ALE as a completion
+" source for other completion plugins, like Deoplete.
+let g:ale_completion_enabled = 1
+let g:ale_sign_error = '⁉️'
+let g:ale_sign_warning = '⚠️'
+let g:airline#extensions#ale#enabled = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#left_sep = ' '
 let g:airline#extensions#tabline#left_alt_sep = '|'
