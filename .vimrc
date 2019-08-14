@@ -9,22 +9,23 @@ Plug 'scrooloose/syntastic'
 Plug 'Vimjas/vim-python-pep8-indent'
 Plug 'kh3phr3n/python-syntax'
 Plug 'tell-k/vim-autopep8'
-Plug 'aanari/vim-tsx-pretty'
-Plug 'pangloss/vim-javascript'
 Plug 'leafgarland/typescript-vim'
-Plug 'Quramy/vim-js-pretty-template'
-Plug 'mxw/vim-jsx'
-Plug 'posva/vim-vue'
+Plug 'maxmellon/vim-jsx-pretty'
+" Plug 'isRuslan/vim-es6'
+Plug 'dense-analysis/ale'
+"
 " Functionality
 Plug 'scrooloose/nerdtree'
-Plug 'powerline/powerline', {'rtp': 'powerline/bindings/vim/'}
+" Plug 'powerline/powerline'
 Plug 'scrooloose/nerdcommenter'
 Plug 'alvan/vim-closetag'
 Plug 'tpope/vim-surround' 
 " Search
-Plug 'kien/ctrlp.vim'
-Plug 'artur-shaik/vim-javacomplete2'
+" Plug 'kien/ctrlp.vim'
+Plug 'vim-ctrlspace/vim-ctrlspace'
+" Plug 'artur-shaik/vim-javacomplete2'
 " Theming
+Plug 'vim-airline/vim-airline'
 call plug#end()
 
 """ Auto Installation
@@ -51,18 +52,51 @@ call plug#end()
 " **** THEMING BELOW ****
 " set background=light
 " colorscheme "material.vim"
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#left_sep = ' '
+let g:airline#extensions#tabline#left_alt_sep = '|'
+let g:airline#extensions#tabline#formatter = 'unique_tail'
 " **** THEMING ABOVE ****
 
+" **** ALL SET MODIFIERS BELOW ****
+set tabstop=2
+set shiftwidth=2
+set expandtab
+set nocompatible
+set hidden
 set complete=.,b,u,]
 set wildmode=longest,list:longest
 set completeopt=menu,preview
 set omnifunc=syntaxcomplete#Complete
 set autoread
+
+" persistent undo
+set undofile                 "turn on the feature  
+set undodir=$HOME/.vim/undo  "directory where the undo files will be stored
+
+set showcmd
+set splitbelow
+set splitright
+
+" Highlight all matches at search
+set hlsearch
+
+" Enable code folding
+set foldmethod=indent
+set foldlevel=99
+
+" normal backspace
+set backspace=indent,eol,start
+
+" Line numbers
+set nu
+" set relativenumber
+" Copy from VIM and outside
+set clipboard=unnamed
+
+syntax on
 au FocusGained,BufEnter * checktime
-if has('persistent_undo')      "check if your vim version supports it
-  set undofile                 "turn on the feature  
-  set undodir=$HOME/.vim/undo  "directory where the undo files will be stored
-  endif     
+
 
 " **** ALL MAPPINGS BELOW ****
 " Mark replacement
@@ -84,11 +118,6 @@ inoremap <C-e> <C-n>
 nnoremap <C-n> :NERDTreeToggle<CR>
 " **** ALL MAPPINGS ABOVE ****
 
-" **** ALL SET MODIFIERS BELOW ****
-set tabstop=2
-set shiftwidth=2
-set expandtab
-
 :nnoremap gr :grep '\b<cword>\b' *<CR>
 :nnoremap GR :grep '\b<cword>\b' %:p:h/*<CR>
 " automatically resize windows 
@@ -96,40 +125,8 @@ autocmd VimResized * wincmd =
 
 let mapleader = ","
 
-set showcmd
-
-" autocmd FileType python setlocal colorcolumn=79
-" autocmd FileType java setlocal colorcolumn=99
-
-set splitbelow
-set splitright
-
-" Highlight all matches at search
-set hlsearch
-syntax on
-
-" always show status line, also used for powerline
-set laststatus=2
-
-" Enable code folding
-set foldmethod=indent
-set foldlevel=99
-
-" normal backspace
-set backspace=indent,eol,start
-
-" Line numbers
-set nu
-" set relativenumber
-" Copy from VIM and outside
-set clipboard=unnamed
-
-let g:Powerline_symbols = 'fancy'
-
-" typescript stuff
-let g:typescript_indent_disable = 1
-let g:typescript_compiler_binary = 'tsc'
-let g:typescript_compiler_options = ''
+autocmd FileType python setlocal colorcolumn=79
+autocmd FileType java setlocal colorcolumn=99
 
 " CTRLP
 " Always CTRLP to root dir
@@ -166,15 +163,18 @@ let g:NERDTrimTrailingWhitespace = 1
 
 
 " Typescript and jsx
+let g:typescript_indent_disable = 1
+let g:typescript_compiler_binary = 'tsc'
+let g:typescript_compiler_options = ''
+
 let g:vim_jsx_pretty_enable_jsx_highlight = 1
 let g:vim_jsx_pretty_colorful_config = 1
 
+" set statusline+=%#warningmsg#
+" set statusline+=%{SyntasticStatuslineFlag()}
+" set statusline+=%*
 
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-
-let g:syntastic_python_checkers = ['python3']
+let g:syntastic_python_checkers = ['python3', 'JavaScript', 'TypeScript']
 let g:syntastic_error_symbol = "👉"
 let g:syntastic_warning_symbol = "🔥"
 let g:syntastic_always_populate_loc_list = 0
@@ -187,28 +187,21 @@ let g:syntastic_mode_map = {
     \ "passive_filetypes": ["html"] }
 " filenames like *.xml, *.html, *.xhtml, ...
 " Then after you press <kbd>&gt;</kbd> in these files, this plugin will try to close the current tag.
-"
 let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.js,*.jsx,*.ejs,*.ts,*.tsx'
 
 " filenames like *.xml, *.xhtml, ...
 " This will make the list of non closing tags self closing in the specified files.
-"
 let g:closetag_xhtml_filenames = '*.html,*.xhtml,*.phtml,*.js,*.jsx,*.ejs,*.ts,*.tsx'
 
 " integer value [0|1]
 " This will make the list of non closing tags case sensitive (e.g. `<Link>` will be closed while `<link>` won't.)
-"
 let g:closetag_emptyTags_caseSensitive = 1
 
 " Shortcut for closing tags, default is '>'
-"
 let g:closetag_shortcut = '>'
 
 " Add > at current position without closing the current tag, default is ''
-"
 let g:closetag_close_shortcut = '<leader>>'
-" **** ALL SET MODIFIERS ABOVE ****
-
 
 " **** CUSTOM FUNCTIONS ****
 function Find(x)
@@ -242,5 +235,4 @@ nmap <F6> <Plug>(JavaComplete-Imports-AddMissing)
 imap <F6> <Plug>(JavaComplete-Imports-AddMissing)
 map <F7> <Plug>(JavaComplete-Imports-RemoveUnused)
 imap <F7> <Plug>(JavaComplete-Imports-RemoveUnused)
-
 

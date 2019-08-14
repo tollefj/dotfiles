@@ -18,7 +18,7 @@ dot_files = ['.vimrc', '.gitconfig', '.bash_profile']
 user = os.environ.get('USER')
 dot_dir = os.path.join('/Users', user)
 # modify git_dir if you want to run this outside the git directory
-git_dir = os.path.join(os.getcwd(), 'Documents', 'Git', 'dotfiles')
+git_dir = os.path.join(os.getcwd(), 'Documents', 'dotfiles')
 os.chdir(git_dir)
 
 
