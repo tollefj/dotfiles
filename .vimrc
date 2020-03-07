@@ -11,6 +11,7 @@ Plug 'kh3phr3n/python-syntax'
 Plug 'tell-k/vim-autopep8'
 Plug 'leafgarland/typescript-vim'
 Plug 'maxmellon/vim-jsx-pretty'
+Plug 'evanleck/vim-svelte'
 " Plug 'isRuslan/vim-es6'
 Plug 'dense-analysis/ale'
 "
@@ -20,6 +21,8 @@ Plug 'scrooloose/nerdtree'
 Plug 'scrooloose/nerdcommenter'
 Plug 'alvan/vim-closetag'
 Plug 'tpope/vim-surround' 
+" Python
+Plug 'davidhalter/jedi-vim'
 " Search
 Plug 'kien/ctrlp.vim'
 " Plug 'artur-shaik/vim-javacomplete2'
@@ -46,6 +49,16 @@ call plug#end()
   if !isdirectory($HOME . "/.vim/undodir")
     call mkdir($HOME . "/.vim/undodir", "p")
   endif
+
+" https://jeffkreeftmeijer.com/vim-number/
+" turn hybrid line numbers on
+:set number relativenumber
+:set nu rnu
+:augroup numbertoggle
+:  autocmd!
+:  autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
+:  autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
+:augroup END
 
 """ Appearance
 " **** THEMING BELOW ****
@@ -233,6 +246,10 @@ let python_highlight_all=1
 
 autocmd FileType python noremap <buffer> <F8> :call Autopep8()<CR>
 " autocmd Filetype javascript setlocal ts=2 sw=2 sts=0 expandtab
+
+let g:jedi#use_splits_not_buffers = "right"
+
+
 " **** PYTHON STUFF ABOVE ****
 
 " *** JAVA ***
@@ -244,3 +261,7 @@ imap <F6> <Plug>(JavaComplete-Imports-AddMissing)
 map <F7> <Plug>(JavaComplete-Imports-RemoveUnused)
 imap <F7> <Plug>(JavaComplete-Imports-RemoveUnused)
 
+
+" SVELTE
+let g:svelte_indent_script = 0
+let g:svelte_indent_style = 0
