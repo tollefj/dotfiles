@@ -14,7 +14,7 @@ import shutil
 import subprocess
 
 
-dot_files = ['.vimrc', '.gitconfig', '.bash_profile']
+dot_files = ['.vimrc', '.gitconfig', '.bash_profile', '.zshrc']
 user = os.environ.get('USER')
 dot_dir = os.path.join('/Users', user)
 # modify git_dir if you want to run this outside the git directory
@@ -86,7 +86,12 @@ def main():
     for f in dot_files:
         print('Checking ' + f)
         repo_file = os.path.join(git_dir, f)
+        if not os.path.isfile(repo_file):
+            print('no repo file, copy!')
+            cp(local_file, repo_file)
+        print("repo file: {}".format(repo_file))
         local_file = os.path.join(dot_dir, f)
+        print("local_file file: {}".format(local_file))
         local_outdated = is_newer(repo_file, local_file)
         if local_outdated:
             print('Local outdated! Copying from repo to ~/')
