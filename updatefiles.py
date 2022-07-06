@@ -18,7 +18,7 @@ dot_files = [".vimrc", ".gitconfig", ".bash_profile", ".zshrc"]
 user = os.environ.get("USER")
 dot_dir = os.path.join("/Users", user)
 # modify git_dir if you want to run this outside the git directory
-git_dir = os.path.join(os.getcwd(), "Documents", "dotfiles")
+git_dir = os.path.join(os.getcwd())
 os.chdir(git_dir)
 
 
@@ -60,9 +60,7 @@ class Git:
     def commit(self):
         if not self.nothing_to_commit():
             timestamp=time.strftime("%H:%M - %d/%m/%y")
-            fn="commit -am {commit_string} at {timestamp}".format(
-                commit_string="Automated commit",
-                timestamp={timestamp})
+            fn=f'commit -am "Automated commit at ${timestamp}"'
             self.call(fn)
             self.push()
         else:
@@ -91,16 +89,16 @@ def main():
         repo_file=os.path.join(git_dir, f)
         if not os.path.isfile(repo_file):
             print("Added new file: {}".format(repo_file))
-            cp(local_file, repo_file)
+            #cp(local_file, repo_file)
         local_file=os.path.join(dot_dir, f)
         local_outdated=is_newer(repo_file, local_file)
         if local_outdated:
             print("Local outdated! Copying from repo to ~/")
-            cp(repo_file, local_file)
+            #cp(repo_file, local_file)
         else:
             print("Repo outdated! Copying from ~/ to repo")
             files_to_update=True
-            cp(local_file, repo_file)
+            #cp(local_file, repo_file)
         if verify_copy(repo_file, local_file):
             print("Successfully copied {}".format(f))
     if files_to_update:

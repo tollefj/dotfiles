@@ -1,20 +1,15 @@
 export LC_ALL=en_US.UTF-8
 # If you come from bash you might have to change your $PATH.
 export PATH=$HOME/bin:/usr/local/bin:$PATH
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm" 
-export PATH=$PATH:/Applications/Postgres.app/Contents/Versions/latest/bin
-export NVM_DIR="$HOME/.nvm"
-[ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
-[ -s "/usr/local/opt/nvm/etc/bash_completion" ] && . "/usr/local/opt/nvm/etc/bash_completion"  # This loads nvm bash_completion
 
-# Path to your oh-my-zsh installation.
 export ZSH="/Users/tollef/.oh-my-zsh"
 #
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-ZSH_THEME="tollef"
+# ZSH_THEME="tollef"
+ZSH_THEME="agnoster"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -121,17 +116,10 @@ alias bashprof='vim ~/.bash_profile'
 alias z='vim ~/.zshrc'
 alias vimrc='vim ~/.vimrc'
 
-alias ipconfig='ifconfig | grep inet'
-alias updatedots='py3 ~/Documents/dotfiles/updatefiles.py'
-alias docs='cd ~/Git'
-alias mito='cd ~/Git/mito'
+alias docs='cd ~/Downloads/git'
 
 alias st='git status'
 alias logp='git log --pretty=oneline --abbrev-commit'
-
-alias torconf='cd /usr/local/etc/tor'
-
-alias master='cd /Users/tollef/Git/MasterStuff/msc-tollefej'
 
 # # >>> conda initialize >>>
 # # !! Contents within this block are managed by 'conda init' !!
@@ -147,10 +135,3 @@ alias master='cd /Users/tollef/Git/MasterStuff/msc-tollefej'
 # fi
 # unset __conda_setup
 # # <<< conda initialize <<<
-
-
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/tollef/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/tollef/Downloads/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/Users/tollef/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/tollef/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
