@@ -21,8 +21,6 @@ Plug 'scrooloose/nerdtree'
 Plug 'scrooloose/nerdcommenter'
 Plug 'alvan/vim-closetag'
 Plug 'tpope/vim-surround' 
-" Python
-Plug 'davidhalter/jedi-vim'
 " Search
 Plug 'kien/ctrlp.vim'
 " Plug 'artur-shaik/vim-javacomplete2'
@@ -247,21 +245,8 @@ let python_highlight_all=1
 autocmd FileType python noremap <buffer> <F8> :call Autopep8()<CR>
 " autocmd Filetype javascript setlocal ts=2 sw=2 sts=0 expandtab
 
-let g:jedi#use_splits_not_buffers = "right"
-
-
 " **** PYTHON STUFF ABOVE ****
-
-" *** JAVA ***
-autocmd FileType java setlocal omnifunc=javacomplete#Complete
-nmap <F4> <Plug>(JavaComplete-Imports-AddSmart)
-imap <F4> <Plug>(JavaComplete-Imports-AddSmart)
-nmap <F6> <Plug>(JavaComplete-Imports-AddMissing)
-imap <F6> <Plug>(JavaComplete-Imports-AddMissing)
-map <F7> <Plug>(JavaComplete-Imports-RemoveUnused)
-imap <F7> <Plug>(JavaComplete-Imports-RemoveUnused)
-
-
+"
 " SVELTE
 let g:svelte_indent_script = 0
 let g:svelte_indent_style = 0

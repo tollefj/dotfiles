@@ -1,8 +1,7 @@
 export LC_ALL=en_US.UTF-8
-# If you come from bash you might have to change your $PATH.
 export PATH=$HOME/bin:/usr/local/bin:$PATH
-
 export ZSH="/Users/tollef/.oh-my-zsh"
+
 #
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -68,7 +67,6 @@ plugins=(
 )
 
 source $ZSH/oh-my-zsh.sh
-source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # User configuration
 
@@ -121,17 +119,27 @@ alias docs='cd ~/Downloads/git'
 alias st='git status'
 alias logp='git log --pretty=oneline --abbrev-commit'
 
-# # >>> conda initialize >>>
-# # !! Contents within this block are managed by 'conda init' !!
-# __conda_setup="$('/Users/tollef/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-# if [ $? -eq 0 ]; then
-#     eval "$__conda_setup"
-# else
-#     if [ -f "/Users/tollef/anaconda3/etc/profile.d/conda.sh" ]; then
-#         . "/Users/tollef/anaconda3/etc/profile.d/conda.sh"
-#     else
-#         export PATH="/Users/tollef/anaconda3/bin:$PATH"
-#     fi
-# fi
-# unset __conda_setup
-# # <<< conda initialize <<<
+source /Users/tollef/.oh-my-zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# https://github.com/agnoster/agnoster-zsh-theme/issues/39
+prompt_context() {
+  if [[ "$USER" != "$DEFAULT_USER" || -n "$SSH_CLIENT" ]]; then
+    #prompt_segment black default "%(!.%{%F{yellow}%}.)$USER"
+  fi
+}
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/Users/tollef/miniforge3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/Users/tollef/miniforge3/etc/profile.d/conda.sh" ]; then
+        . "/Users/tollef/miniforge3/etc/profile.d/conda.sh"
+    else
+        export PATH="/Users/tollef/miniforge3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+

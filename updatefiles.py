@@ -89,16 +89,16 @@ def main():
         repo_file=os.path.join(git_dir, f)
         if not os.path.isfile(repo_file):
             print("Added new file: {}".format(repo_file))
-            #cp(local_file, repo_file)
+            cp(local_file, repo_file)
         local_file=os.path.join(dot_dir, f)
         local_outdated=is_newer(repo_file, local_file)
         if local_outdated:
             print("Local outdated! Copying from repo to ~/")
-            #cp(repo_file, local_file)
+            cp(repo_file, local_file)
         else:
             print("Repo outdated! Copying from ~/ to repo")
             files_to_update=True
-            #cp(local_file, repo_file)
+            cp(local_file, repo_file)
         if verify_copy(repo_file, local_file):
             print("Successfully copied {}".format(f))
     if files_to_update:
