@@ -120,6 +120,8 @@ alias docs='cd ~/Downloads/git'
 alias st='git status'
 alias logp='git log --pretty=oneline --abbrev-commit'
 
+alias reload='source ~/.zshrc'
+
 source /Users/tollef/.oh-my-zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # https://github.com/agnoster/agnoster-zsh-theme/issues/39
