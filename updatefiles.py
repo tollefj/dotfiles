@@ -5,7 +5,7 @@
 # Ensures that local and repo dotfiles are updated
 #
 # THIS FILE IS DESIGNED FOR MAC OS
-# To change to any other OS, modify the paths and user script.
+    # To change to any other OS, modify the paths and user script.
 
 
 import os
@@ -16,13 +16,16 @@ import subprocess
 
 dot_files = [".vimrc", ".gitconfig", ".bash_profile", ".zshrc"]
 user = os.environ.get("USER")
-dot_dir = os.path.join("/Users", user)
-# modify git_dir if you want to run this outside the git directory
+dot_dir = os.environ.get("HOME")  # Use HOME environment variable
 git_dir = os.path.join(os.getcwd())
+print(git_dir)
 os.chdir(git_dir)
 
 
 def creation_date(f, pretty=False):
+    if not os.path.isfile(f):
+        return 0
+
     def mod_date(f):
         return time.ctime(os.path.getmtime(f))
 
