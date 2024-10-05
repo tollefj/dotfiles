@@ -1,8 +1,7 @@
 export LC_ALL=en_US.UTF-8
 export PATH=$HOME/bin:/usr/local/bin:$PATH
-export ZSH="/Users/tollef/.oh-my-zsh"
+export ZSH="$HOME/.oh-my-zsh"
 
-#
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
@@ -137,8 +136,6 @@ alias glog='git log'
 
 alias reload='source ~/.zshrc'
 
-source /Users/tollef/.oh-my-zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-
 # https://github.com/agnoster/agnoster-zsh-theme/issues/39
 prompt_context() {
   if [[ "$USER" != "$DEFAULT_USER" || -n "$SSH_CLIENT" ]]; then
@@ -161,3 +158,4 @@ fi
 unset __conda_setup
 # <<< conda initialize <<<
 
+source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
