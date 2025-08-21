@@ -1,0 +1,217 @@
+-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+--
+-- FUNCTIONS
+--
+
+-- usage: open a .sh file and press <leader>r to execute it
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = "sh",
+	callback = function()
+		vim.keymap.set("n", "<leader>r", function()
+			local file = vim.fn.expand("%:p")
+			vim.cmd("!" .. file)
+		end, { buffer = true, desc = "Run shell script" })
+	end,
+})
+
+-- <leader>o to open file in finder
+vim.keymap.set("n", "<leader>O", function()
+	local file = vim.fn.expand("%:p")
+	vim.cmd("!" .. "open " .. file)
+end, { desc = "Open file in finder" })
+
+-- Copy Full File-Path
+vim.keymap.set("n", "<leader>pa", function()
+	local path = vim.fn.expand("%:p")
+	vim.fn.setreg("+", path)
+	print("file:", path)
+end)
+
+--
+-- END FUNCTIONS
+--
+-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+--
+-- SETS
+--
+-- Set the leader key to space
+vim.g.mapleader = " "
+vim.g.maplocalleader = ","
+
+-- ignore case when searching
+vim.opt.ignorecase = true
+
+vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "LSP Go to Definition" })
+
+vim.keymap.set("n", "<leader>w", function()
+	vim.wo.wrap = not vim.wo.wrap
+end)
+
+-- <leader>up to update plugins
+vim.keymap.set("n", "<leader>up", function()
+	vim.cmd("Lazy update")
+end, { desc = "Update plugins" })
+
+-- plugin-specific keymaps
+-- ### NeoTree
+vim.keymap.set("n", "<leader>e", "<cmd>Neotree toggle<CR>")
+vim.keymap.set("n", "<C-N>", "<cmd>Neotree toggle<CR>")
+
+-- Window navigation mappings
+vim.keymap.set("n", "<C-J>", "<C-W><C-J>")
+vim.keymap.set("n", "<C-K>", "<C-W><C-K>")
+vim.keymap.set("n", "<C-J>", "<C-W><C-L>")
+vim.keymap.set("n", "<C-H>", "<C-W><C-H>")
+
+-- Move selected lines up and down in visual mode
+vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
+vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
+
+vim.keymap.set("v", "<", "<gv", { desc = "Indent left and reselect" })
+vim.keymap.set("v", ">", ">gv", { desc = "Indent right and reselect" })
+
+-- J-> Join lines and maintain cursor position
+vim.keymap.set("n", "J", "mzJ`z", { desc = "Join lines and keep cursor position" })
+
+-- Keep cursor in the middle when scrolling
+vim.keymap.set("n", "<C-d>", "<C-d>zz")
+vim.keymap.set("n", "<C-u>", "<C-u>zz")
+
+-- Keep search results centered
+vim.keymap.set("n", "n", "nzzzv")
+vim.keymap.set("n", "N", "Nzzzv")
+
+vim.keymap.set("n", "<leader>zig", "<cmd>LspRestart<cr>") -- Restart LSP server
+
+-- Paste over selection without copying the replaced text
+vim.keymap.set("x", "<leader>p", [["_dP]])
+
+vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]])
+vim.keymap.set("n", "<leader>Y", [["+Y]])
+
+-- Delete without yanking
+vim.keymap.set({ "n", "v" }, "<leader>d", '"_d')
+
+-- Map Ctrl-c to Escape in insert mode
+vim.keymap.set("i", "<C-c>", "<Esc>")
+
+-- Disable Ex mode and set up tmux integration
+vim.keymap.set("n", "Q", "<nop>")
+vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
+
+-- Format current buffer
+vim.keymap.set("n", "<leader>f", function()
+	require("conform").format({ bufnr = 0 })
+end)
+
+-- keyword search (hyphenated words are 1 word)
+vim.opt.iskeyword:append("-") -- Treat dash as part of word
+
+-- Quickfix and location list navigation
+vim.keymap.set("n", "<C-ø>", "<cmd>cnext<CR>zz") -- Next item in quickfix list
+vim.keymap.set("n", "<C-æ>", "<cmd>cprev<CR>zz") -- Previous item in quickfix list
+vim.keymap.set("n", "<leader>ø", "<cmd>lnext<CR>zz") -- Next item in location list
+vim.keymap.set("n", "<leader>æ", "<cmd>lprev<CR>zz") -- Previous item in location list
+
+-- Search and replace current word
+vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]]) -- usage: highlight word and press <leader>s and then enter replacement
+
+-- Make current file executable
+vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
+
+-- Source current file
+-- vim.keymap.set("n", "<leader><leader>", function()
+--     vim.cmd("so")
+-- end)
+vim.opt.guicursor = ""
+-- vim.opt.guicursor =
+-- 	"n-v-c:block,i-ci-ve:block,r-cr:hor20,o:hor50,a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor,sm:block-blinkwait175-blinkoff150-blinkon175"
+-- vim.opt.mouse = "a" -- Enable mouse support
+
+vim.opt.splitbelow = true -- Horizontal splits open below the current window
+vim.opt.splitright = true -- Vertical splits open to the right of the current window
+
+-- Buffer prev and next (ctrl-, ctrl-.), override default mappings
+vim.keymap.set("n", "<C-,>", "<cmd>bprevious<CR>", { desc = "Previous buffer" })
+vim.keymap.set("n", "<C-.>", "<cmd>bnext<CR>", { desc = "Next buffer" })
+
+-- shared clipboard (macos)
+vim.opt.clipboard = "unnamedplus"
+
+vim.opt.nu = true
+vim.opt.relativenumber = true
+
+vim.opt.tabstop = 2
+vim.opt.softtabstop = 2
+vim.opt.shiftwidth = 2
+vim.opt.expandtab = true
+
+vim.opt.smartindent = true
+vim.opt.wrap = true
+
+-- Disable swapfile and backup
+vim.opt.swapfile = false
+vim.opt.backup = false
+-- Set up persistent undo history in a dedicated directory
+vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
+vim.opt.undofile = true
+
+-- Disable highlight search and enable incremental search
+vim.opt.hlsearch = false
+vim.opt.incsearch = true
+
+-- Enable true color support
+vim.opt.termguicolors = true
+
+-- Keep 8 lines visible above/below cursor while scrolling
+vim.opt.scrolloff = 10
+vim.opt.sidescrolloff = 10
+-- Always show the signcolumn (used for git signs, diagnostics etc)
+vim.opt.signcolumn = "yes"
+-- Allow @ in filenames
+vim.opt.isfname:append("@-@")
+
+-- Reduce update time for better user experience
+-- time in milliseconds
+-- default: 4000
+vim.opt.updatetime = 500
+
+-- Show a vertical line at column 80
+-- vim.opt.colorcolumn = "120"
+-- disable veritcal line:
+vim.opt.colorcolumn = ""
+
+-- Tab behavior set, alternative to :tabnew or :tabe
+vim.keymap.set("n", "<leader>tn", ":tabnew<CR>", { desc = "New tab" })
+vim.keymap.set("n", "<leader>tx", ":tabclose<CR>", { desc = "Close tab" })
+
+vim.keymap.set("n", "<leader>b", "<cmd>Telescope bibtex<CR>", { desc = "Telescope BibTeX" })
+
+--
+-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+--
+-- END SETS
+
+vim.cmd.colorscheme("retrobox")
+vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
+vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
+
+-- Return to last edit position when opening files
+vim.api.nvim_create_autocmd("BufReadPost", {
+	group = augroup,
+	callback = function()
+		local mark = vim.api.nvim_buf_get_mark(0, '"')
+		local lcount = vim.api.nvim_buf_line_count(0)
+		if mark[1] > 0 and mark[1] <= lcount then
+			pcall(vim.api.nvim_win_set_cursor, 0, mark)
+		end
+	end,
+})
+
+require("config.lazy")
