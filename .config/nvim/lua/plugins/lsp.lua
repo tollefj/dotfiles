@@ -88,6 +88,30 @@ return {
 						},
 					})
 				end,
+				["pyright"] = function()
+					local lspconfig = require("lspconfig")
+					lspconfig.pyright.setup({
+						capabilities = capabilities,
+						-- Optional: Add specific pyright settings here if needed
+						-- For example, to ensure it picks up your virtual environment:
+						-- settings = {
+						--     python = {
+						--         analysis = {
+						--             pythonPath = vim.fn.exepath("python"), -- This will use the python in your PATH
+						--             autoSearchPaths = true,
+						--             useLibraryCodeForTypes = true,
+						--             indexing = true,
+						--         },
+						--     },
+						-- },
+						root_dir = lspconfig.util.root_pattern(
+							"pyproject.toml",
+							"setup.py",
+							"requirements.txt",
+							".git"
+						) or lspconfig.util.find_git_ancestor, -- Default Python root patterns
+					})
+				end,
 			},
 		})
 

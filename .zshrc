@@ -127,6 +127,7 @@ alias ignore='echo "$1" >> .gitignore'
 alias lower='pbpaste | tr "[:upper:]" "[:lower:]" | pbcopy'
 
 alias x='tmux new-session -d \; split-window -h \; split-window -v \; select-pane -t 0 \; split-window -v \; attach'
+alias ip="ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1'"
 
 
 # %%%%%%%%%%%%%%%%% START FNs %%%%%%%%%%%%%%%%%

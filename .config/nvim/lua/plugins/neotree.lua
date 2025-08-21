@@ -17,7 +17,7 @@ return {
 		window = {
 			mappings = {
 				["o"] = "system_open",
-				["O"] = "system_open",
+				["0"] = "system_open",
 			},
 		},
 		filtered_items = {

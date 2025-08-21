@@ -1,5 +1,4 @@
 """ Plug installation
-
 call plug#begin('~/.vim/plugged')
 filetype plugin indent on
 
@@ -26,6 +25,7 @@ Plug 'kien/ctrlp.vim'
 " Plug 'artur-shaik/vim-javacomplete2'
 " Theming
 Plug 'vim-airline/vim-airline'
+Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
 call plug#end()
 
 """ Auto Installation
@@ -61,15 +61,16 @@ call plug#end()
 """ Appearance
 " **** THEMING BELOW ****
 " set background=light
-" colorscheme "material.vim"
+colorscheme catppuccin " catppuccin-latte, catppuccin-frappe, catppuccin-macchiato, catppuccin-mocha
+
 
 " Enable completion where available.
 " This setting must be set before ALE is loaded.
 " You should not turn this setting on if you wish to use ALE as a completion
 " source for other completion plugins, like Deoplete.
 let g:ale_completion_enabled = 1
-let g:ale_sign_error = '⁉️'
-let g:ale_sign_warning = '⚠️'
+" let g:ale_sign_error = '⁉️'
+" let g:ale_sign_warning = '⚠️'
 let g:airline#extensions#ale#enabled = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#left_sep = ' '
@@ -122,7 +123,7 @@ au FocusGained,BufEnter * checktime
 noremap t `
 
 " Select all with Ctrl-A
-noremap <C-a> <esc>gg0vG$<CR>
+" noremap <C-a> <esc>gg0vG$<CR>
 
 "split navigations
 nnoremap <C-J> <C-W><C-J>
@@ -243,10 +244,12 @@ let NERDTreeShowHidden=1
 let python_highlight_all=1
 
 autocmd FileType python noremap <buffer> <F8> :call Autopep8()<CR>
-" autocmd Filetype javascript setlocal ts=2 sw=2 sts=0 expandtab
+autocmd FileType python map <buffer> <F9> :w<CR>:exec '!python3' shellescape(@%, 1)<CR>
+autocmd FileType python imap <buffer> <F9> <esc>:w<CR>:exec '!python3' shellescape(@%, 1)<CR>
 
 " **** PYTHON STUFF ABOVE ****
-"
+" JS
+" autocmd Filetype javascript setlocal ts=2 sw=2 sts=0 expandtab
 " SVELTE
 let g:svelte_indent_script = 0
 let g:svelte_indent_style = 0
