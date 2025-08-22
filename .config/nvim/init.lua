@@ -10,7 +10,9 @@ g.mapleader = " "
 g.maplocalleader = ","
 
 -- Set colorscheme
-cmd.colorscheme("retrobox")
+-- good ones: retrobox, slate, sorbet,
+cmd.colorscheme("sorbet")
+-- transparency if fancy
 api.nvim_set_hl(0, "Normal", { bg = "none" })
 api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
 
@@ -36,14 +38,17 @@ opt.undofile = true
 opt.hlsearch = false -- Disable highlight search
 opt.incsearch = true -- Enable incremental search
 opt.termguicolors = true -- Enable true color support
-opt.scrolloff = 10 -- Keep 10 lines visible above/below cursor
-opt.sidescrolloff = 10
-opt.signcolumn = "yes" -- Always show the signcolumn
+opt.scrolloff = 15 -- Keep 10 lines visible above/below cursor
+opt.sidescrolloff = 15
 opt.isfname:append("@-@") -- Allow @ in filenames
-opt.updatetime = 500 -- Reduce update time
+opt.updatetime = 1000 -- Reduce update time
+opt.signcolumn = "yes" -- Always show the signcolumn
 opt.colorcolumn = "" -- Disable vertical line
 
-opt.guicursor = "" -- Set guicursor
+
+opt.cursorline = false -- Disable cursor line
+-- opt.guicursor = "" -- Set guicursor
+opt.guicursor = "n-v-c:block,i-ci-ve:ver25,r-cr-o:hor20" -- Set cursor shape for different modes
 
 -- Keymaps
 local function map(mode, lhs, rhs, opts)
