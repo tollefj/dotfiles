@@ -10,11 +10,15 @@ g.mapleader = " "
 g.maplocalleader = ","
 
 -- Set colorscheme
--- good ones: retrobox, slate, sorbet,
-cmd.colorscheme("sorbet")
+-- good ones: retrobox, slate, sorbet, darkblue
+cmd.colorscheme("darkblue")
 -- transparency if fancy
 api.nvim_set_hl(0, "Normal", { bg = "none" })
 api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
+
+-- easy size increment/decrement vertical split with  keybinds <leader>> and <leader><
+keymap.set("n", "<leader>0", "6<C-w>>", { desc = "Increase vertical split" })
+keymap.set("n", "<leader>9", "6<C-w><", { desc = "Decrease vertical split" })
 
 -- Sensible options
 opt.ignorecase = true -- Ignore case when searching
@@ -38,17 +42,19 @@ opt.undofile = true
 opt.hlsearch = false -- Disable highlight search
 opt.incsearch = true -- Enable incremental search
 opt.termguicolors = true -- Enable true color support
-opt.scrolloff = 15 -- Keep 10 lines visible above/below cursor
-opt.sidescrolloff = 15
+opt.scrolloff = 5 -- Keep 10 lines visible above/below cursor
+opt.sidescrolloff = 5
 opt.isfname:append("@-@") -- Allow @ in filenames
 opt.updatetime = 1000 -- Reduce update time
 opt.signcolumn = "yes" -- Always show the signcolumn
 opt.colorcolumn = "" -- Disable vertical line
 
 
-opt.cursorline = false -- Disable cursor line
+-- cursorline as number:
+opt.cursorline = true -- Enable cursor line
+opt.cursorlineopt = "number" -- Show cursor line only on the number column
 -- opt.guicursor = "" -- Set guicursor
-opt.guicursor = "n-v-c:block,i-ci-ve:ver25,r-cr-o:hor20" -- Set cursor shape for different modes
+-- opt.guicursor = "n-v-c:block,i-ci-ve:ver25,r-cr-o:hor20" -- Set cursor shape for different modes
 
 -- Keymaps
 local function map(mode, lhs, rhs, opts)

@@ -10,7 +10,7 @@ return {
 		end)
 
 		vim.keymap.set("n", "<leader>zZ", function()
-			require("zen-mode").setup({ window = { width = 80, height = 40 } })
+			require("zen-mode").setup({ window = { width = 80, height = 35 } })
 			require("zen-mode").toggle()
 			vim.wo.number = false
 			vim.wo.rnu = false
