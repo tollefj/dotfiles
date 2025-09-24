@@ -11,7 +11,7 @@ g.maplocalleader = ","
 
 -- Set colorscheme
 -- good ones: retrobox, slate, sorbet, darkblue
-cmd.colorscheme("darkblue")
+cmd.colorscheme("evening")
 -- transparency if fancy
 api.nvim_set_hl(0, "Normal", { bg = "none" })
 api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
@@ -45,10 +45,9 @@ opt.termguicolors = true -- Enable true color support
 opt.scrolloff = 5 -- Keep 10 lines visible above/below cursor
 opt.sidescrolloff = 5
 opt.isfname:append("@-@") -- Allow @ in filenames
-opt.updatetime = 1000 -- Reduce update time
+opt.updatetime = 400 -- Reduce update time
 opt.signcolumn = "yes" -- Always show the signcolumn
 opt.colorcolumn = "" -- Disable vertical line
-
 
 -- cursorline as number:
 opt.cursorline = true -- Enable cursor line
@@ -156,6 +155,21 @@ map("n", "<leader>pa", function()
 	vim.fn.setreg("+", path)
 	print("file:", path)
 end, { desc = "Copy full file path" })
+
+-- Clear LaTeX commands in a visual selection or range
+vim.api.nvim_create_user_command("ClearLatex", function(opts)
+	local cmd = opts.args
+	-- Escape for Lua and Vim regex
+	local pattern = "\\\\" .. cmd .. "{\\([^}]*\\)}"
+	local replace = "\\1"
+
+	-- Run the substitution on the range
+	local command = string.format("%d,%ds/%s/%s/g", opts.line1, opts.line2, pattern, replace)
+	vim.cmd(command)
+end, {
+	nargs = 1, -- requires one argument, e.g. textbf
+	range = true, -- works on visual selections or explicit ranges
+})
 
 -- Load plugins
 require("config.lazy")
