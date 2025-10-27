@@ -9,8 +9,11 @@ export PATH="/opt/homebrew/bin:$PATH"
 # export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
 export PATH=`gem environment gemdir`/bin:$PATH
 export PATH="$PATH:/Users/tollef/.local/bin"
+#%%%%%%%%%% SIKT %%%%%%%%%%
+export VAULT_ADDR=https://vault.sikt.no:8200
 #%%%%%%%%%% ZSH %%%%%%%%%%%
 export ZSH="/Users/tollef/.oh-my-zsh"
+
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 # ZSH_THEME="tollef"
 # ZSH_THEME="agnoster"
@@ -96,14 +99,15 @@ alias spaceDock="defaults write -array com.apple.dock persistent-apps-add '{tile
 alias la='ls -a'
 alias lc='ls -col'
 alias lr='ls -ltr'
+alias lines='ls -1 | wc -l'
 
-alias pyvirtual='virtualenv venv --distribute; source venv/bin/activate'
-alias activate='source venv/bin/activate'
+alias pyvirtual='virtualenv .venv --distribute; source venv/bin/activate'
+alias activate='source .venv/bin/activate'
 alias python='python3'
 alias pip='pip3'
 alias py='python'
 alias py3='python3'
-alias py3virtual='virtualenv -p python3 venv; source venv/bin/activate'
+alias py3virtual='python3 -m venv .venv; source .venv/bin/activate'
 
 alias bashprof='nvim ~/.bash_profile'
 alias z='nvim ~/.zshrc'
@@ -115,7 +119,7 @@ alias phd="vim ~/git/thesis/tex"
 
 alias home='cd ~'
 alias dl='cd ~/Downloads'
-alias docs='cd ~/git'
+alias docs='cd ~/sikt'
 
 alias st='git status'
 alias logp='git log --pretty=oneline --abbrev-commit'
@@ -130,60 +134,9 @@ alias lower='pbpaste | tr "[:upper:]" "[:lower:]" | pbcopy'
 alias x='tmux new-session -d \; split-window -h \; split-window -v \; select-pane -t 0 \; split-window -v \; attach'
 alias ip="ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1'"
 
+# %%%%% helpers for github %%%%%
+alias addignore='wget -O .gitignore https://gist.githubusercontent.com/tollefj/0c435215496b9c7e5af64e34bac0b0cb/raw'
 
-# %%%%%%%%%%%%%%%%% START FNs %%%%%%%%%%%%%%%%%
-latex-build() {
-  local tex_files=(*.tex)
-
-  if [ ${#tex_files[@]} -eq 0 ]; then
-    echo "❌ No .tex files found in the current directory."
-    return 1
-  fi
-
-  echo "📄 Select a .tex file to build:"
-  select choice in "${tex_files[@]}"; do
-    if [[ -n "$choice" ]]; then
-      name="${choice%.tex}"
-      break
-    else
-      echo "❌ Invalid selection. Please choose a number."
-    fi
-  done
-
-  echo -n "📦 Do you want to create a zip of the entire folder after build? (y/n): "
-  read zip_choice
-
-  echo "🔧 Building $name.tex..."
-  if ! pdflatex "$name.tex"; then echo "❌ pdflatex failed"; return 1; fi
-  if ! bibtex "$name"; then echo "❌ bibtex failed"; return 1; fi
-  if ! pdflatex "$name.tex"; then echo "❌ pdflatex 2nd pass failed"; return 1; fi
-  if ! pdflatex "$name.tex"; then echo "❌ pdflatex 3rd pass failed"; return 1; fi
-
-  echo "✅ Build complete: $name.pdf"
-
-  if [[ "$zip_choice" =~ ^[Yy]$ ]]; then
-    local current_dir
-    current_dir=$(basename "$PWD")
-    local parent_dir
-    parent_dir=$(dirname "$PWD")
-    local timestamp
-    timestamp=$(date +"%Y%m%d_%H%M%S")
-    local zip_name="${current_dir}_build_${timestamp}.zip"
-
-    echo "📦 Zipping entire folder to: $parent_dir/$zip_name"
-    (cd .. && zip -r "$zip_name" "$current_dir" > /dev/null)
-
-    if [ -f "$parent_dir/$zip_name" ]; then
-      echo "✅ Archive created: $zip_name"
-    else
-      echo "⚠️  ZIP creation failed."
-    fi
-  fi
-}
-# %%%%%%%%%%%%%%%%% END FNs   %%%%%%%%%%%%%%%%%
-
-
-source /Users/tollef/.oh-my-zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # https://github.com/agnoster/agnoster-zsh-theme/issues/39
 prompt_context() {
@@ -195,3 +148,40 @@ prompt_context() {
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+set -o vi
+bindkey '^R' history-incremental-search-backward
+
+# activate .venv environment if it exists upon opening
+if [ -d "./.venv" ] && [ -f "./.venv/bin/activate" ]; then
+    source ./.venv/bin/activate
+fi
+
+# TMUX
+mux() {
+    local session_name="${1:-default}"
+
+    if tmux has-session -t "$session_name" 2>/dev/null; then
+        tmux attach-session -t "$session_name"
+    else
+        tmux new-session -s "$session_name" \; split-window -h \; select-pane -t 0
+    fi
+}
+
+gls() {
+    local limit="${1:-}"
+    local output
+
+    output=$((git ls-files; git ls-files --others --exclude-standard) | while read file; do
+        if [ -f "$file" ]; then
+            timestamp=$(git log -1 --format=%ai -- "$file" 2>/dev/null || stat -f "%Sm" -t "%Y-%m-%d %H:%M:%S" "$file")
+            echo "$timestamp $file"
+        fi
+    done | sort -r)
+
+    if [ -n "$limit" ]; then
+        echo "$output" | head -n "$limit"
+    else
+        echo "$output"
+    fi
+}

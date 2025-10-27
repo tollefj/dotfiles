@@ -20,8 +20,8 @@ return {
 		"hrsh7th/cmp-path",
 		"hrsh7th/cmp-cmdline",
 		"hrsh7th/nvim-cmp",
-		-- "L3MON4D3/LuaSnip",
-		-- "saadparwaiz1/cmp_luasnip",
+		"L3MON4D3/LuaSnip",
+		"saadparwaiz1/cmp_luasnip",
 		"j-hui/fidget.nvim",
 	},
 
@@ -42,9 +42,10 @@ return {
 		require("mason").setup()
 		require("mason-lspconfig").setup({
 			ensure_installed = {
-				-- "ltex_plus",
-        "pyright",
-        "lua_ls",
+				-- "lua_ls",
+				-- "rust_analyzer",
+				-- "gopls",
+				--             "pyright",
 			},
 			handlers = {
 				function(server_name) -- default handler (optional)

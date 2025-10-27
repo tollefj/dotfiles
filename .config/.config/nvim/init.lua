@@ -9,11 +9,12 @@ local cmd = vim.cmd
 g.mapleader = " "
 g.maplocalleader = ","
 
+-- Set colorscheme
+-- good ones: retrobox, slate, sorbet, darkblue
+cmd.colorscheme("evening")
 -- transparency if fancy
 api.nvim_set_hl(0, "Normal", { bg = "none" })
 api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
-api.nvim_set_hl(0, "NeoTreeNormal", { bg = "none" })
-api.nvim_set_hl(0, "NeoTreeNormalNC", { bg = "none" })
 
 -- easy size increment/decrement vertical split with  keybinds <leader>> and <leader><
 keymap.set("n", "<leader>0", "6<C-w>>", { desc = "Increase vertical split" })

@@ -22,3 +22,6 @@ ignore_items:
   # Platform-specific
   - windows-terminal
   - com.googlecode.iterm2.plist
+
+  # IDE/Editor configurations
+  - .config/github-copilot

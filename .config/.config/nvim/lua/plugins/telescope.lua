@@ -3,40 +3,11 @@ return {
 
 	dependencies = {
 		"nvim-lua/plenary.nvim",
-		-- "nvim-telescope/telescope-bibtex.nvim",
+		"nvim-telescope/telescope-bibtex.nvim",
 	},
 
 	config = function()
-		require("telescope").setup({
-			extensions = {
-				media_files = {
-					-- filetypes whitelist
-					-- defaults to {"png", "jpg", "mp4", "webm", "pdf"}
-					filetypes = { "png", "webp", "jpg", "jpeg", "pdf" },
-					-- find command (defaults to `fd`)
-					find_cmd = "rg",
-				},
-			},
-			defaults = {
-				file_ignore_patterns = {
-					-- "%.png",
-					-- "%.jpg",
-					-- "%.jpeg",
-          "%.lock",
-					"%.gif",
-					-- "%.pdf",
-					"%.zip",
-					"%.tar",
-					"%.gz",
-					"node_modules/",
-					"venv/",
-					"%.pyc",
-					"__pycache__/",
-					"%.git/",
-					"%.DS_Store",
-				},
-			},
-		})
+		require("telescope").setup({})
 
 		local builtin = require("telescope.builtin")
 		vim.keymap.set("n", "<leader><leader>", builtin.find_files, {})
