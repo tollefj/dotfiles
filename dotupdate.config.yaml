@@ -10,6 +10,7 @@ ignore_items:
   # dotupdate files
   - dotupdate.py
   - dotupdate.config.yaml
+  - Makefile
 
   # Archived files
   - old
