@@ -7,21 +7,12 @@ ignore_items:
   - .gitignore
   - .gitconfig
 
-  # Documentation
-  - MAC_GET_STARTED.md
-  - SETUP.md
-  - README.md
-
-  # Scripts and programs
-  - update.sh
-  - updatefiles.py
-  - updatefiles_v2.py
+  # dotupdate files
   - dotupdate.py
   - dotupdate.config.yaml
 
-  # Platform-specific
-  - windows-terminal
-  - com.googlecode.iterm2.plist
+  # Archived files
+  - old
 
   # IDE/Editor configurations
   - .config/github-copilot
