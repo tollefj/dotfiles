@@ -11,6 +11,8 @@ import os
 import sys
 import time
 import shutil
+import filecmp
+import argparse
 import subprocess
 from pathlib import Path
 from typing import List, Set, Optional, Dict, Any
@@ -256,18 +258,38 @@ class DotfileSync:
         return path.stat().st_mtime
 
     @staticmethod
-    def are_timestamps_close(path1: Path, path2: Path, tolerance: int = 100) -> bool:
-        """Check if two paths have similar modification times"""
-        mtime1 = DotfileSync.get_mtime(path1)
-        mtime2 = DotfileSync.get_mtime(path2)
-        return abs(mtime1 - mtime2) < tolerance
+    def contents_match(path1: Path, path2: Path) -> bool:
+        """Check if two paths have identical content (files or directories)"""
+        if path1.is_file() and path2.is_file():
+            return filecmp.cmp(path1, path2, shallow=False)
+        if path1.is_dir() and path2.is_dir():
+            return DotfileSync._dirs_match(path1, path2)
+        return False
 
     @staticmethod
-    def is_newer(path1: Path, path2: Path, buffer: int = 100) -> bool:
-        """Check if path1 is newer than path2 (with buffer for tie-breaking)"""
-        mtime1 = DotfileSync.get_mtime(path1)
-        mtime2 = DotfileSync.get_mtime(path2)
-        return mtime1 > (mtime2 - buffer)
+    def _dirs_match(dir1: Path, dir2: Path) -> bool:
+        """Recursively check if two directories have identical file content"""
+        entries1 = {e.name for e in dir1.iterdir()}
+        entries2 = {e.name for e in dir2.iterdir()}
+        if entries1 != entries2:
+            return False
+        for name in entries1:
+            p1 = dir1 / name
+            p2 = dir2 / name
+            if p1.is_file() and p2.is_file():
+                if not filecmp.cmp(p1, p2, shallow=False):
+                    return False
+            elif p1.is_dir() and p2.is_dir():
+                if not DotfileSync._dirs_match(p1, p2):
+                    return False
+            else:
+                return False
+        return True
+
+    @staticmethod
+    def is_newer(path1: Path, path2: Path) -> bool:
+        """Check if path1 was modified more recently than path2"""
+        return DotfileSync.get_mtime(path1) > DotfileSync.get_mtime(path2)
 
     def copy_directory_contents(self, src: Path, dest: Path):
         """
@@ -356,7 +378,7 @@ class DotfileSync:
         if home_is_dir != repo_is_dir:
             return ('type_mismatch', 'Type mismatch!', 'skip', Colors.RED, '✗')
 
-        if self.are_timestamps_close(home_path, repo_path):
+        if self.contents_match(home_path, repo_path):
             return ('in_sync', 'In sync', 'skip', Colors.GREEN, '✓')
 
         if self.is_newer(repo_path, home_path):
@@ -428,7 +450,7 @@ class DotfileSync:
                         log_error(f"Type mismatch - skipping")
                     return False
 
-                if self.are_timestamps_close(home_path, repo_path):
+                if self.contents_match(home_path, repo_path):
                     if verbose:
                         log_success("Already in sync")
                     return False
@@ -462,9 +484,10 @@ class DotfileSync:
 
         return False
 
-    def interactive_sync(self):
+    def sync_all(self, interactive: bool = False):
         """
-        Interactive synchronization - discover files and ask for each one.
+        Synchronize dotfiles. By default syncs all actionable items.
+        With interactive=True, prompts for each item.
         """
         log(f"\n{'='*50}", Colors.HEADER)
         log("DISCOVERING DOTFILES", Colors.HEADER + Colors.BOLD)
@@ -485,30 +508,40 @@ class DotfileSync:
             item_info.append((item, status, description, action))
             log(f"{color}{symbol} [{i:2d}] {item:30s} {description}{Colors.RESET}")
 
-        log(f"\n{'-'*50}\n", Colors.CYAN)
-        log_info("Default: No (press Enter to skip, 'y' to sync)")
-        print()
+        # Collect items that need syncing
+        actionable = [(item, status, description, action)
+                      for item, status, description, action in item_info
+                      if action != 'skip']
 
-        # Ask for each item
-        selected_items = []
-        for item, status, description, action in item_info:
-            if action == 'skip':
-                if status == 'in_sync':
-                    log(f"⊙ {item} - already in sync, skipping", Colors.GREEN)
-                else:
-                    log_warning(f"Skipping {item} - {description}")
-                continue
-
-            if prompt_yes_no(f"Sync {Colors.BOLD}{item}{Colors.RESET}?", default=False):
-                selected_items.append(item)
-                log_success(f"  ✓ Will sync {item}")
-            else:
-                log(f"  ✗ Skipped {item}", Colors.RESET)
-
-        # Perform sync
-        if not selected_items:
-            log_warning("\nNo items selected for sync")
+        if not actionable:
+            log_info("\nAll dotfiles are in sync")
             return
+
+        if interactive:
+            log(f"\n{'-'*50}\n", Colors.CYAN)
+            log_info("Default: No (press Enter to skip, 'y' to sync)")
+            print()
+
+            selected_items = []
+            for item, status, description, action in item_info:
+                if action == 'skip':
+                    if status == 'in_sync':
+                        log(f"⊙ {item} - already in sync, skipping", Colors.GREEN)
+                    else:
+                        log_warning(f"Skipping {item} - {description}")
+                    continue
+
+                if prompt_yes_no(f"Sync {Colors.BOLD}{item}{Colors.RESET}?", default=False):
+                    selected_items.append(item)
+                    log_success(f"  Will sync {item}")
+                else:
+                    log(f"  Skipped {item}", Colors.RESET)
+
+            if not selected_items:
+                log_warning("\nNo items selected for sync")
+                return
+        else:
+            selected_items = [item for item, _, _, _ in actionable]
 
         log(f"\n{'='*50}", Colors.HEADER)
         log(f"SYNCING {len(selected_items)} ITEM(S)", Colors.HEADER + Colors.BOLD)
@@ -521,6 +554,11 @@ class DotfileSync:
 
 def main():
     """Main entry point"""
+    parser = argparse.ArgumentParser(description="Dotfiles synchronization tool")
+    parser.add_argument("-i", "--interactive", action="store_true",
+                        help="Prompt before syncing each item (default: sync all)")
+    args = parser.parse_args()
+
     log(f"\n{'#'*50}", Colors.HEADER + Colors.BOLD)
     log("DOTFILES UPDATE UTILITY", Colors.HEADER + Colors.BOLD)
     log(f"{'#'*50}\n", Colors.HEADER + Colors.BOLD)
@@ -551,9 +589,9 @@ def main():
         if not git.sync():
             log_warning("Git sync incomplete - continuing anyway")
 
-        # Step 2: Interactive dotfile sync
+        # Step 2: Dotfile sync
         dotfiles = DotfileSync(home_dir, repo_dir, ignore_items)
-        dotfiles.interactive_sync()
+        dotfiles.sync_all(interactive=args.interactive)
 
         # Step 3: Commit and push if needed
         if dotfiles.repo_modified:

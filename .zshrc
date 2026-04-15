@@ -9,6 +9,7 @@ export PATH="/opt/homebrew/bin:$PATH"
 # export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
 export PATH=`gem environment gemdir`/bin:$PATH
 export PATH="$PATH:/Users/tollef/.local/bin"
+export PATH="$PATH:/Users/tollef/Library/Python/3.9/bin"
 #%%%%%%%%%% SIKT %%%%%%%%%%
 export VAULT_ADDR=https://vault.sikt.no:8200
 #%%%%%%%%%% ZSH %%%%%%%%%%%
@@ -59,11 +60,22 @@ source $ZSH/oh-my-zsh.sh
 # npm install -g prettier
 
 # ---- START FZF AND FD SEARCH -----
-# export FZF_DEFAULT_COMMAND="fd --type f --strip-cwd-prefix --hidden --exclude node_modules --exclude __pycache__ --exclude .git --exclude .venv --exclude .mypy_cache --exclude .pytest_cache --exclude dist --exclude build --exclude env --exclude venv --exclude '*.egg-info' ."
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 export FZF_DEFAULT_COMMAND="fd --type f --strip-cwd-prefix --exclude node_modules --exclude __pycache__ --exclude .git --exclude .venv --exclude .mypy_cache --exclude .pytest_cache --exclude dist --exclude build --exclude env --exclude venv --exclude '*.egg-info' ."
 
-
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+# f() {
+#   grep -rn "$1" --color=auto | fzf | awk -F: '{print "+" $2 " " $1}' | xargs -r nvim
+# }
+
+f() {
+  local EXCLUDE_DIRS="node_modules|.git|dist|build|venv|__pycache__|.history"
+  grep -rn "$1" --color=auto \
+    --exclude-dir={$EXCLUDE_DIRS} \
+    | fzf \
+    | awk -F: '{print "+" $2 " " $1}' \
+    | xargs -r nvim
+}
 
 # ---- END FZF AND FD SEARCH -----
 
@@ -111,6 +123,7 @@ alias py3virtual='python3 -m venv .venv; source .venv/bin/activate'
 
 alias bashprof='nvim ~/.bash_profile'
 alias z='nvim ~/.zshrc'
+alias claudeconf='nvim /Users/tollef/Library/"Application Support"/Claude/claude_desktop_config.json'
 alias vimrc='nvim ~/.vimrc'
 alias vim="nvim"
 alias nv="vim ~/.config/nvim"
@@ -136,6 +149,7 @@ alias ip="ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0
 
 # %%%%% helpers for github %%%%%
 alias addignore='wget -O .gitignore https://gist.githubusercontent.com/tollefj/0c435215496b9c7e5af64e34bac0b0cb/raw'
+alias blog='cd git/tollefj.github.io'
 
 
 # https://github.com/agnoster/agnoster-zsh-theme/issues/39
@@ -152,10 +166,6 @@ export NVM_DIR="$HOME/.nvm"
 set -o vi
 bindkey '^R' history-incremental-search-backward
 
-# activate .venv environment if it exists upon opening
-if [ -d "./.venv" ] && [ -f "./.venv/bin/activate" ]; then
-    source ./.venv/bin/activate
-fi
 
 # TMUX
 mux() {
@@ -185,3 +195,8 @@ gls() {
         echo "$output"
     fi
 }
+
+# activate .venv environment if it exists upon opening
+if [ -d "./.venv" ] && [ -f "./.venv/bin/activate" ]; then
+    source ./.venv/bin/activate
+fi

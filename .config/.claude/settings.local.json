@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(echo:*)",
+      "Bash(alias fg)",
+      "Bash(bindkey:*)",
+      "Bash(fzf:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
