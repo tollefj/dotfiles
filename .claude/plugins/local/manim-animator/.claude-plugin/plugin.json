@@ -1,0 +1,4 @@
+{
+  "name": "manim-animator",
+  "description": "Skill for creating Manim animations from natural language descriptions, producing mp4 videos for presentations"
+}

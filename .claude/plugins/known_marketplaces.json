@@ -1,0 +1,19 @@
+{
+  "sikt-skills-marketplace": {
+    "source": {
+      "source": "git",
+      "url": "https://gitlab.sikt.no/ki-team/initiatives/skills.git"
+    },
+    "installLocation": "/Users/tollef/.claude/plugins/marketplaces/sikt-skills-marketplace",
+    "lastUpdated": "2026-04-21T09:50:30.555Z",
+    "autoUpdate": true
+  },
+  "claude-plugins-official": {
+    "source": {
+      "source": "github",
+      "repo": "anthropics/claude-plugins-official"
+    },
+    "installLocation": "/Users/tollef/.claude/plugins/marketplaces/claude-plugins-official",
+    "lastUpdated": "2026-04-21T09:50:30.691Z"
+  }
+}

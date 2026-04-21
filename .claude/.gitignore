@@ -1,0 +1,11 @@
+/*
+!.gitignore
+!CLAUDE.md
+!restore.sh
+!README.restore.md
+!plugins/
+plugins/cache/
+plugins/marketplaces/
+!skills/
+
+.DS_Store

@@ -151,6 +151,10 @@ alias ip="ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0
 alias addignore='wget -O .gitignore https://gist.githubusercontent.com/tollefj/0c435215496b9c7e5af64e34bac0b0cb/raw'
 alias blog='cd git/tollefj.github.io'
 
+portkill() {
+  local pids=$(lsof -ti :"$1")
+  [ -n "$pids" ] && kill -9 $pids
+}
 
 # https://github.com/agnoster/agnoster-zsh-theme/issues/39
 prompt_context() {

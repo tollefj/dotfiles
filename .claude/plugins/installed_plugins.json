@@ -1,0 +1,175 @@
+{
+  "version": 2,
+  "plugins": {
+    "sikt-design-system@sikt-skills-marketplace": [
+      {
+        "scope": "user",
+        "installPath": "/Users/tollef/.claude/plugins/cache/sikt-skills-marketplace/sikt-design-system/1.0.0",
+        "version": "1.0.0",
+        "installedAt": "2026-01-26T10:47:22.622Z",
+        "lastUpdated": "2026-04-14T13:52:08.916Z",
+        "gitCommitSha": "bf97ceeb8653749ffe97997ff7ff985c090e66b3"
+      }
+    ],
+    "platon-cicd-skills@sikt-skills-marketplace": [
+      {
+        "scope": "user",
+        "installPath": "/Users/tollef/.claude/plugins/cache/sikt-skills-marketplace/platon-cicd-skills/1.0.1",
+        "version": "1.0.1",
+        "installedAt": "2026-01-26T10:47:20.327Z",
+        "lastUpdated": "2026-04-14T14:45:57.705Z",
+        "gitCommitSha": "bf97ceeb8653749ffe97997ff7ff985c090e66b3"
+      }
+    ],
+    "platon-infrastructure-skills@sikt-skills-marketplace": [
+      {
+        "scope": "user",
+        "installPath": "/Users/tollef/.claude/plugins/cache/sikt-skills-marketplace/platon-infrastructure-skills/1.0.0",
+        "version": "1.0.0",
+        "installedAt": "2026-01-26T10:47:21.027Z",
+        "lastUpdated": "2026-04-14T13:52:08.922Z",
+        "gitCommitSha": "bf97ceeb8653749ffe97997ff7ff985c090e66b3"
+      }
+    ],
+    "feide-docs@sikt-skills-marketplace": [
+      {
+        "scope": "user",
+        "installPath": "/Users/tollef/.claude/plugins/cache/sikt-skills-marketplace/feide-docs/1.0.0",
+        "version": "1.0.0",
+        "installedAt": "2026-01-26T10:47:19.444Z",
+        "lastUpdated": "2026-04-14T13:52:08.920Z",
+        "gitCommitSha": "bf97ceeb8653749ffe97997ff7ff985c090e66b3"
+      }
+    ],
+    "code-review@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "/Users/tollef/.claude/plugins/cache/claude-plugins-official/code-review/7f1c9cbbc53f",
+        "version": "7f1c9cbbc53f",
+        "installedAt": "2026-01-26T10:47:14.242Z",
+        "lastUpdated": "2026-04-13T13:32:07.890Z",
+        "gitCommitSha": "e30768372b4150ca1bc0839d93283e8edc30d60d"
+      }
+    ],
+    "explanatory-output-style@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "/Users/tollef/.claude/plugins/cache/claude-plugins-official/explanatory-output-style/1.0.0",
+        "version": "1.0.0",
+        "installedAt": "2026-01-26T10:47:14.748Z",
+        "lastUpdated": "2026-04-08T11:13:37.938Z",
+        "gitCommitSha": "e30768372b4150ca1bc0839d93283e8edc30d60d"
+      }
+    ],
+    "lua-lsp@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "/Users/tollef/.claude/plugins/cache/claude-plugins-official/lua-lsp/1.0.0",
+        "version": "1.0.0",
+        "installedAt": "2026-01-26T10:47:19.714Z",
+        "lastUpdated": "2026-01-26T10:47:19.714Z",
+        "gitCommitSha": "e30768372b4150ca1bc0839d93283e8edc30d60d"
+      }
+    ],
+    "pyright-lsp@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "/Users/tollef/.claude/plugins/cache/claude-plugins-official/pyright-lsp/1.0.0",
+        "version": "1.0.0",
+        "installedAt": "2026-01-26T10:47:21.701Z",
+        "lastUpdated": "2026-01-26T10:47:21.701Z",
+        "gitCommitSha": "e30768372b4150ca1bc0839d93283e8edc30d60d"
+      }
+    ],
+    "security-guidance@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "/Users/tollef/.claude/plugins/cache/claude-plugins-official/security-guidance/7f1c9cbbc53f",
+        "version": "7f1c9cbbc53f",
+        "installedAt": "2026-01-26T10:47:21.958Z",
+        "lastUpdated": "2026-04-13T13:32:07.883Z",
+        "gitCommitSha": "e30768372b4150ca1bc0839d93283e8edc30d60d"
+      }
+    ],
+    "typescript-lsp@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "/Users/tollef/.claude/plugins/cache/claude-plugins-official/typescript-lsp/1.0.0",
+        "version": "1.0.0",
+        "installedAt": "2026-01-26T10:47:23.619Z",
+        "lastUpdated": "2026-01-26T10:47:23.619Z",
+        "gitCommitSha": "e30768372b4150ca1bc0839d93283e8edc30d60d"
+      }
+    ],
+    "web-development@sikt-skills-marketplace": [
+      {
+        "scope": "user",
+        "installPath": "/Users/tollef/.claude/plugins/cache/sikt-skills-marketplace/web-development/1.0.1",
+        "version": "1.0.1",
+        "installedAt": "2026-01-26T10:47:24.262Z",
+        "lastUpdated": "2026-04-14T13:52:08.840Z",
+        "gitCommitSha": "bf97ceeb8653749ffe97997ff7ff985c090e66b3"
+      }
+    ],
+    "code-simplifier@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "/Users/tollef/.claude/plugins/cache/claude-plugins-official/code-simplifier/1.0.0",
+        "version": "1.0.0",
+        "installedAt": "2026-01-26T10:47:14.495Z",
+        "lastUpdated": "2026-01-26T10:47:14.495Z",
+        "gitCommitSha": "e30768372b4150ca1bc0839d93283e8edc30d60d"
+      }
+    ],
+    "plugin-dev@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "/Users/tollef/.claude/plugins/cache/claude-plugins-official/plugin-dev/7f1c9cbbc53f",
+        "version": "7f1c9cbbc53f",
+        "installedAt": "2026-01-26T10:47:21.432Z",
+        "lastUpdated": "2026-04-13T13:32:07.896Z",
+        "gitCommitSha": "e30768372b4150ca1bc0839d93283e8edc30d60d"
+      }
+    ],
+    "context7@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "/Users/tollef/.claude/plugins/cache/claude-plugins-official/context7/7f1c9cbbc53f",
+        "version": "7f1c9cbbc53f",
+        "installedAt": "2026-04-14T09:18:51.478Z",
+        "lastUpdated": "2026-04-14T09:18:51.478Z",
+        "gitCommitSha": "7f1c9cbbc53f7b9b0e1c8d955cb92b5966c22012"
+      }
+    ],
+    "github@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "/Users/tollef/.claude/plugins/cache/claude-plugins-official/github/7f1c9cbbc53f",
+        "version": "7f1c9cbbc53f",
+        "installedAt": "2026-04-14T09:19:02.765Z",
+        "lastUpdated": "2026-04-14T09:19:02.765Z",
+        "gitCommitSha": "7f1c9cbbc53f7b9b0e1c8d955cb92b5966c22012"
+      }
+    ],
+    "superpowers@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "/Users/tollef/.claude/plugins/cache/claude-plugins-official/superpowers/5.0.7",
+        "version": "5.0.7",
+        "installedAt": "2026-04-14T09:19:28.452Z",
+        "lastUpdated": "2026-04-14T09:19:28.452Z",
+        "gitCommitSha": "917e5f53b16b115b70a3a355ed5f4993b9f8b73d"
+      }
+    ],
+    "elixir-ls-lsp@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "/Users/tollef/.claude/plugins/cache/claude-plugins-official/elixir-ls-lsp/1.0.0",
+        "version": "1.0.0",
+        "installedAt": "2026-04-16T15:13:47.290Z",
+        "lastUpdated": "2026-04-16T15:13:47.290Z",
+        "gitCommitSha": "806a6eeeb88b9a306a59b3212a1d5d88aa5c70af"
+      }
+    ]
+  }
+}
