@@ -6,6 +6,7 @@
 .config/configstore
 .config/gcloud
 .config/github-copilot
+.config/iterm2/AppSupport/parsers
 .config/iterm2/sockets
 .config/mps-youtube
 .git

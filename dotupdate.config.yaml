@@ -17,6 +17,7 @@ ignore_items:
   - .config/gcloud
   - .config/mps-youtube
   - .config/configstore
+  - .config/iterm2/AppSupport/parsers/
 
   # iTerm2: AppSupport is a symlink to ~/Library/Application Support/iTerm2
   # and is preserved as a symlink — no need to ignore its contents here.

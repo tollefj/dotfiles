@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(python3:*)",
-      "Bash(uv run *)"
+      "Bash(uv run *)",
+      "Bash(git rm *)"
     ]
   }
 }
