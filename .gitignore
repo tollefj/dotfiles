@@ -1,3 +1,17 @@
 *.DS_Store
 *.txt
 *.swp
+
+# dotupdate managed
+.config/configstore
+.config/gcloud
+.config/github-copilot
+.config/iterm2/sockets
+.config/mps-youtube
+.git
+.gitconfig
+.gitignore
+Makefile
+dotupdate.config.yaml
+dotupdate.py
+old

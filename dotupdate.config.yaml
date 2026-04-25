@@ -12,8 +12,13 @@ ignore_items:
   - dotupdate.config.yaml
   - Makefile
 
-  # Archived files
   - old
-
-  # IDE/Editor configurations
   - .config/github-copilot
+  - .config/gcloud
+  - .config/mps-youtube
+  - .config/configstore
+
+  # iTerm2: AppSupport is a symlink to ~/Library/Application Support/iTerm2
+  # and is preserved as a symlink — no need to ignore its contents here.
+  # sockets/secrets contains AI credentials and must not be committed.
+  - .config/iterm2/sockets

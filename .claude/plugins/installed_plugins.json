@@ -43,61 +43,67 @@
     ],
     "code-review@claude-plugins-official": [
       {
-        "scope": "user",
-        "installPath": "/Users/tollef/.claude/plugins/cache/claude-plugins-official/code-review/7f1c9cbbc53f",
-        "version": "7f1c9cbbc53f",
+        "scope": "project",
+        "projectPath": "/Users/tollef/git/dotfiles",
+        "installPath": "/Users/tollef/.claude/plugins/cache/claude-plugins-official/code-review/567cba45e882",
+        "version": "567cba45e882",
         "installedAt": "2026-01-26T10:47:14.242Z",
-        "lastUpdated": "2026-04-13T13:32:07.890Z",
+        "lastUpdated": "2026-04-25T09:34:04.824Z",
         "gitCommitSha": "e30768372b4150ca1bc0839d93283e8edc30d60d"
       }
     ],
     "explanatory-output-style@claude-plugins-official": [
       {
-        "scope": "user",
+        "scope": "project",
+        "projectPath": "/Users/tollef/git/dotfiles",
         "installPath": "/Users/tollef/.claude/plugins/cache/claude-plugins-official/explanatory-output-style/1.0.0",
         "version": "1.0.0",
         "installedAt": "2026-01-26T10:47:14.748Z",
-        "lastUpdated": "2026-04-08T11:13:37.938Z",
+        "lastUpdated": "2026-04-25T09:31:42.904Z",
         "gitCommitSha": "e30768372b4150ca1bc0839d93283e8edc30d60d"
       }
     ],
     "lua-lsp@claude-plugins-official": [
       {
-        "scope": "user",
+        "scope": "project",
+        "projectPath": "/Users/tollef/git/dotfiles",
         "installPath": "/Users/tollef/.claude/plugins/cache/claude-plugins-official/lua-lsp/1.0.0",
         "version": "1.0.0",
         "installedAt": "2026-01-26T10:47:19.714Z",
-        "lastUpdated": "2026-01-26T10:47:19.714Z",
+        "lastUpdated": "2026-04-25T09:31:42.904Z",
         "gitCommitSha": "e30768372b4150ca1bc0839d93283e8edc30d60d"
       }
     ],
     "pyright-lsp@claude-plugins-official": [
       {
-        "scope": "user",
+        "scope": "project",
+        "projectPath": "/Users/tollef/git/dotfiles",
         "installPath": "/Users/tollef/.claude/plugins/cache/claude-plugins-official/pyright-lsp/1.0.0",
         "version": "1.0.0",
         "installedAt": "2026-01-26T10:47:21.701Z",
-        "lastUpdated": "2026-01-26T10:47:21.701Z",
+        "lastUpdated": "2026-04-25T09:31:42.904Z",
         "gitCommitSha": "e30768372b4150ca1bc0839d93283e8edc30d60d"
       }
     ],
     "security-guidance@claude-plugins-official": [
       {
-        "scope": "user",
-        "installPath": "/Users/tollef/.claude/plugins/cache/claude-plugins-official/security-guidance/7f1c9cbbc53f",
-        "version": "7f1c9cbbc53f",
+        "scope": "project",
+        "projectPath": "/Users/tollef/git/dotfiles",
+        "installPath": "/Users/tollef/.claude/plugins/cache/claude-plugins-official/security-guidance/567cba45e882",
+        "version": "567cba45e882",
         "installedAt": "2026-01-26T10:47:21.958Z",
-        "lastUpdated": "2026-04-13T13:32:07.883Z",
+        "lastUpdated": "2026-04-25T09:34:04.826Z",
         "gitCommitSha": "e30768372b4150ca1bc0839d93283e8edc30d60d"
       }
     ],
     "typescript-lsp@claude-plugins-official": [
       {
-        "scope": "user",
+        "scope": "project",
+        "projectPath": "/Users/tollef/git/dotfiles",
         "installPath": "/Users/tollef/.claude/plugins/cache/claude-plugins-official/typescript-lsp/1.0.0",
         "version": "1.0.0",
         "installedAt": "2026-01-26T10:47:23.619Z",
-        "lastUpdated": "2026-01-26T10:47:23.619Z",
+        "lastUpdated": "2026-04-25T09:31:42.904Z",
         "gitCommitSha": "e30768372b4150ca1bc0839d93283e8edc30d60d"
       }
     ],
@@ -113,51 +119,54 @@
     ],
     "code-simplifier@claude-plugins-official": [
       {
-        "scope": "user",
+        "scope": "project",
+        "projectPath": "/Users/tollef/git/dotfiles",
         "installPath": "/Users/tollef/.claude/plugins/cache/claude-plugins-official/code-simplifier/1.0.0",
         "version": "1.0.0",
         "installedAt": "2026-01-26T10:47:14.495Z",
-        "lastUpdated": "2026-01-26T10:47:14.495Z",
+        "lastUpdated": "2026-04-25T09:31:42.904Z",
         "gitCommitSha": "e30768372b4150ca1bc0839d93283e8edc30d60d"
       }
     ],
     "plugin-dev@claude-plugins-official": [
       {
-        "scope": "user",
-        "installPath": "/Users/tollef/.claude/plugins/cache/claude-plugins-official/plugin-dev/7f1c9cbbc53f",
-        "version": "7f1c9cbbc53f",
+        "scope": "project",
+        "projectPath": "/Users/tollef/git/dotfiles",
+        "installPath": "/Users/tollef/.claude/plugins/cache/claude-plugins-official/plugin-dev/567cba45e882",
+        "version": "567cba45e882",
         "installedAt": "2026-01-26T10:47:21.432Z",
-        "lastUpdated": "2026-04-13T13:32:07.896Z",
+        "lastUpdated": "2026-04-25T09:34:04.825Z",
         "gitCommitSha": "e30768372b4150ca1bc0839d93283e8edc30d60d"
       }
     ],
     "context7@claude-plugins-official": [
       {
         "scope": "user",
-        "installPath": "/Users/tollef/.claude/plugins/cache/claude-plugins-official/context7/7f1c9cbbc53f",
-        "version": "7f1c9cbbc53f",
+        "installPath": "/Users/tollef/.claude/plugins/cache/claude-plugins-official/context7/567cba45e882",
+        "version": "567cba45e882",
         "installedAt": "2026-04-14T09:18:51.478Z",
-        "lastUpdated": "2026-04-14T09:18:51.478Z",
+        "lastUpdated": "2026-04-25T09:34:04.827Z",
         "gitCommitSha": "7f1c9cbbc53f7b9b0e1c8d955cb92b5966c22012"
       }
     ],
     "github@claude-plugins-official": [
       {
         "scope": "user",
-        "installPath": "/Users/tollef/.claude/plugins/cache/claude-plugins-official/github/7f1c9cbbc53f",
-        "version": "7f1c9cbbc53f",
+        "installPath": "/Users/tollef/.claude/plugins/cache/claude-plugins-official/github/567cba45e882",
+        "version": "567cba45e882",
         "installedAt": "2026-04-14T09:19:02.765Z",
-        "lastUpdated": "2026-04-14T09:19:02.765Z",
+        "lastUpdated": "2026-04-25T09:34:04.828Z",
         "gitCommitSha": "7f1c9cbbc53f7b9b0e1c8d955cb92b5966c22012"
       }
     ],
     "superpowers@claude-plugins-official": [
       {
-        "scope": "user",
+        "scope": "project",
+        "projectPath": "/Users/tollef/git/dotfiles",
         "installPath": "/Users/tollef/.claude/plugins/cache/claude-plugins-official/superpowers/5.0.7",
         "version": "5.0.7",
         "installedAt": "2026-04-14T09:19:28.452Z",
-        "lastUpdated": "2026-04-14T09:19:28.452Z",
+        "lastUpdated": "2026-04-25T09:31:42.904Z",
         "gitCommitSha": "917e5f53b16b115b70a3a355ed5f4993b9f8b73d"
       }
     ],
@@ -169,6 +178,28 @@
         "installedAt": "2026-04-16T15:13:47.290Z",
         "lastUpdated": "2026-04-16T15:13:47.290Z",
         "gitCommitSha": "806a6eeeb88b9a306a59b3212a1d5d88aa5c70af"
+      }
+    ],
+    "frontend-design@claude-plugins-official": [
+      {
+        "scope": "project",
+        "projectPath": "/Users/tollef/git/dotfiles",
+        "installPath": "/Users/tollef/.claude/plugins/cache/claude-plugins-official/frontend-design/567cba45e882",
+        "version": "567cba45e882",
+        "installedAt": "2026-04-25T09:31:42.904Z",
+        "lastUpdated": "2026-04-25T09:31:42.904Z",
+        "gitCommitSha": "567cba45e8826d652680bcb469bff1fdada6325f"
+      }
+    ],
+    "claude-code-setup@claude-plugins-official": [
+      {
+        "scope": "project",
+        "projectPath": "/Users/tollef/git/dotfiles",
+        "installPath": "/Users/tollef/.claude/plugins/cache/claude-plugins-official/claude-code-setup/1.0.0",
+        "version": "1.0.0",
+        "installedAt": "2026-04-25T09:31:42.904Z",
+        "lastUpdated": "2026-04-25T09:31:42.904Z",
+        "gitCommitSha": "567cba45e8826d652680bcb469bff1fdada6325f"
       }
     ]
   }

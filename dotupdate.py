@@ -55,6 +55,45 @@ def log_warning(message: str):
     log(f"⚠ {message}", Colors.YELLOW)
 
 
+_GITIGNORE_SECTION = '# dotupdate managed'
+
+
+def sync_gitignore(repo_dir: Path, ignore_items: Set[str]):
+    """
+    Ensure all ignore_items appear in the managed section of .gitignore.
+    Rebuilds the section on every run so removals from config are reflected.
+    Everything above the section marker is user-owned and never modified.
+    """
+    gitignore_path = repo_dir / '.gitignore'
+    content = gitignore_path.read_text() if gitignore_path.exists() else ''
+
+    if _GITIGNORE_SECTION in content:
+        user_part = content[:content.index(_GITIGNORE_SECTION)].rstrip()
+    else:
+        user_part = content.rstrip()
+
+    user_patterns = {
+        line.strip().rstrip('/')
+        for line in user_part.splitlines()
+        if line.strip() and not line.startswith('#')
+    }
+
+    managed = sorted(
+        item.rstrip('/') for item in ignore_items
+        if item.rstrip('/') not in user_patterns
+    )
+
+    new_content = (
+        user_part + '\n\n' + _GITIGNORE_SECTION + '\n' + '\n'.join(managed) + '\n'
+    )
+
+    if new_content == content:
+        return
+
+    gitignore_path.write_text(new_content)
+    log_success(f".gitignore managed section updated ({len(managed)} entries)")
+
+
 def load_yaml_config(config_path: Path) -> Dict[str, Any]:
     """
     Load YAML config file without external dependencies.
@@ -250,7 +289,7 @@ class DotfileSync:
         self.home_dir = home_dir
         self.repo_dir = repo_dir
         self.repo_modified = False
-        self.ignore_items = ignore_items or set()
+        self.ignore_items = {item.rstrip('/') for item in (ignore_items or set())}
 
     @staticmethod
     def get_mtime(path: Path) -> float:
@@ -269,19 +308,27 @@ class DotfileSync:
     @staticmethod
     def _dirs_match(dir1: Path, dir2: Path) -> bool:
         """Recursively check if two directories have identical file content"""
-        entries1 = {e.name for e in dir1.iterdir()}
-        entries2 = {e.name for e in dir2.iterdir()}
+        entries1 = {e.name for e in dir1.iterdir() if e.name != '.git'}
+        entries2 = {e.name for e in dir2.iterdir() if e.name != '.git'}
         if entries1 != entries2:
             return False
         for name in entries1:
             p1 = dir1 / name
             p2 = dir2 / name
-            if p1.is_file() and p2.is_file():
+            if p1.is_symlink() and p2.is_symlink():
+                if os.readlink(p1) != os.readlink(p2):
+                    return False
+            elif p1.is_symlink() or p2.is_symlink():
+                return False
+            elif p1.is_file() and p2.is_file():
                 if not filecmp.cmp(p1, p2, shallow=False):
                     return False
             elif p1.is_dir() and p2.is_dir():
                 if not DotfileSync._dirs_match(p1, p2):
                     return False
+            elif not p1.is_file() and not p1.is_dir():
+                # Special files (sockets, FIFOs, devices) — skip comparison
+                continue
             else:
                 return False
         return True
@@ -291,32 +338,45 @@ class DotfileSync:
         """Check if path1 was modified more recently than path2"""
         return DotfileSync.get_mtime(path1) > DotfileSync.get_mtime(path2)
 
-    def copy_directory_contents(self, src: Path, dest: Path):
+    def copy_directory_contents(self, src: Path, dest: Path, rel_base: str = ''):
         """
         Copy contents of src directory into dest directory.
         If dest exists, merge contents; if not, create it.
-        This prevents overwriting an existing .config directory.
+        Skips .git entries, non-regular files (sockets, FIFOs), and ignored sub-paths.
+        Symlinks are recreated as symlinks rather than followed.
         """
         dest.mkdir(parents=True, exist_ok=True)
 
         for item in src.iterdir():
+            if item.name == '.git':
+                continue
             src_item = src / item.name
             dest_item = dest / item.name
+            rel_path = f'{rel_base}/{item.name}' if rel_base else item.name
 
-            if src_item.is_dir():
-                # Recursively copy subdirectories
-                self.copy_directory_contents(src_item, dest_item)
-            else:
-                # Copy file
+            if rel_path in self.ignore_items:
+                continue
+
+            if src_item.is_symlink():
+                if dest_item.exists() or dest_item.is_symlink():
+                    dest_item.unlink()
+                os.symlink(os.readlink(src_item), dest_item)
+            elif src_item.is_dir():
+                self.copy_directory_contents(src_item, dest_item, rel_path)
+            elif src_item.is_file():
                 shutil.copy2(src_item, dest_item)
 
-        # Preserve directory metadata
         shutil.copystat(src, dest)
 
     def copy_file(self, src: Path, dest: Path):
-        """Copy a single file with metadata"""
+        """Copy a single file or symlink with metadata"""
         dest.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(src, dest)
+        if src.is_symlink():
+            if dest.exists() or dest.is_symlink():
+                dest.unlink()
+            os.symlink(os.readlink(src), dest)
+        else:
+            shutil.copy2(src, dest)
 
     def discover_dotfiles(self) -> List[str]:
         """
@@ -345,7 +405,9 @@ class DotfileSync:
         if config_dir.exists() and config_dir.is_dir():
             for subdir in config_dir.iterdir():
                 if subdir.is_dir():
-                    discovered.append(f'.config/{subdir.name}')
+                    rel_path = f'.config/{subdir.name}'
+                    if rel_path not in self.ignore_items:
+                        discovered.append(rel_path)
 
         return sorted(discovered)
 
@@ -420,7 +482,7 @@ class DotfileSync:
                     log_info(f"Adding to repo from home")
                 if is_directory:
                     repo_path.mkdir(parents=True, exist_ok=True)
-                    self.copy_directory_contents(home_path, repo_path)
+                    self.copy_directory_contents(home_path, repo_path, item_path)
                 else:
                     self.copy_file(home_path, repo_path)
                 if verbose:
@@ -433,7 +495,7 @@ class DotfileSync:
                     log_info(f"Copying to home from repo")
                 if is_directory:
                     home_path.mkdir(parents=True, exist_ok=True)
-                    self.copy_directory_contents(repo_path, home_path)
+                    self.copy_directory_contents(repo_path, home_path, item_path)
                 else:
                     self.copy_file(repo_path, home_path)
                 if verbose:
@@ -460,7 +522,7 @@ class DotfileSync:
                     if verbose:
                         log_info("Updating home from repo")
                     if is_directory:
-                        self.copy_directory_contents(repo_path, home_path)
+                        self.copy_directory_contents(repo_path, home_path, item_path)
                     else:
                         self.copy_file(repo_path, home_path)
                     if verbose:
@@ -470,7 +532,7 @@ class DotfileSync:
                     if verbose:
                         log_info("Updating repo from home")
                     if is_directory:
-                        self.copy_directory_contents(home_path, repo_path)
+                        self.copy_directory_contents(home_path, repo_path, item_path)
                     else:
                         self.copy_file(home_path, repo_path)
                     if verbose:
@@ -589,7 +651,10 @@ def main():
         if not git.sync():
             log_warning("Git sync incomplete - continuing anyway")
 
-        # Step 2: Dotfile sync
+        # Step 2: Keep .gitignore in sync with ignore list
+        sync_gitignore(repo_dir, ignore_items)
+
+        # Step 3: Dotfile sync
         dotfiles = DotfileSync(home_dir, repo_dir, ignore_items)
         dotfiles.sync_all(interactive=args.interactive)
 
