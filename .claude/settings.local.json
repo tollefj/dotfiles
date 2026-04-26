@@ -3,7 +3,11 @@
     "allow": [
       "Bash(python3:*)",
       "Bash(uv run *)",
-      "Bash(git rm *)"
+      "Bash(git rm *)",
+      "Bash(make iterm2 *)",
+      "Bash(defaults read *)",
+      "Bash(defaults delete *)",
+      "Bash(git -C /Users/tollef/git/dotfiles ls-files .config/iterm2/AppSupport)"
     ]
   }
 }

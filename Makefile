@@ -15,11 +15,11 @@ help: ## Show available targets
 	@awk 'BEGIN {FS = ":.*##"} /^[a-zA-Z_-]+:.*##/ {printf "  \033[94m%-15s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
 .PHONY: sync
-sync: ## Sync all dotfiles (default: auto, -i for interactive)
+sync: iterm2 ## Sync all dotfiles (default: auto, -i for interactive)
 	@$(PYTHON) $(DOTFILES_DIR)/dotupdate.py
 
 .PHONY: sync-interactive
-sync-interactive: ## Sync dotfiles interactively (prompt per item)
+sync-interactive: iterm2 ## Sync dotfiles interactively (prompt per item)
 	@$(PYTHON) $(DOTFILES_DIR)/dotupdate.py -i
 
 .PHONY: push
@@ -139,6 +139,22 @@ print(f'  In sync:  {synced}/{len(items)}')"
 .PHONY: edit
 edit: ## Open dotfiles in default editor
 	@$${EDITOR:-vim} $(DOTFILES_DIR)
+
+# ── App Setup ─────────────────────────────────────────
+
+.PHONY: iterm2
+iterm2: ## Configure iTerm2 to load preferences from dotfiles
+ifeq ($(OS),Darwin)
+	@mkdir -p $(HOME_DIR)/.config/iterm2/prefs
+	@if [ "$$(defaults read com.googlecode.iTerm2 LoadPrefsFromCustomFolder 2>/dev/null)" != "1" ] || \
+	   [ "$$(defaults read com.googlecode.iTerm2 PrefsCustomFolder 2>/dev/null)" != "$(HOME_DIR)/.config/iterm2/prefs" ]; then \
+		defaults write com.googlecode.iTerm2 PrefsCustomFolder -string "$(HOME_DIR)/.config/iterm2/prefs"; \
+		defaults write com.googlecode.iTerm2 LoadPrefsFromCustomFolder -bool YES; \
+		echo "iTerm2: configured to use $(HOME_DIR)/.config/iterm2/prefs — restart iTerm2."; \
+	fi
+else
+	@echo "Skipped: not macOS"
+endif
 
 # ── macOS Defaults ────────────────────────────────────
 
