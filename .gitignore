@@ -3,12 +3,17 @@
 *.swp
 
 # dotupdate managed
+.config/Battle.net/
 .config/configstore
 .config/gcloud
 .config/github-copilot
-.config/iterm2/AppSupport/parsers
+.config/iterm2/AppSupport
 .config/iterm2/sockets
+.config/filezilla/
+.config/menus/
+.config/mgba/
 .config/mps-youtube
+.config/pudb/
 .git
 .gitconfig
 .gitignore
