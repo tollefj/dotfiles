@@ -7,9 +7,7 @@
       "Bash(make iterm2 *)",
       "Bash(defaults read *)",
       "Bash(defaults delete *)",
-      "Bash(git -C /Users/tollef/git/dotfiles ls-files .config/iterm2/AppSupport)",
-      "Bash(git reset *)",
-      "Bash(git add *)"
+      "Bash(git -C /Users/tollef/git/dotfiles ls-files .config/iterm2/AppSupport)"
     ]
   }
 }

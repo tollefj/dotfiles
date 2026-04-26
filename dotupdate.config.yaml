@@ -2,20 +2,24 @@
 # Files and directories to ignore when discovering dotfiles in the repository
 
 ignore_items:
-  # Git files
+  - old
   - .git
   - .gitignore
   - .gitconfig
 
-  # dotupdate files
   - dotupdate.py
   - dotupdate.config.yaml
   - Makefile
 
-  - old
+# custom configs to ignore
   - .config/github-copilot
   - .config/gcloud
   - .config/mps-youtube
   - .config/configstore
   - .config/iterm2/AppSupport
   - .config/iterm2/sockets
+  - .config/Battle.net/
+  - .config/filezilla/
+  - .config/menus/
+  - .config/pudb/
+  - .config/mgba/
