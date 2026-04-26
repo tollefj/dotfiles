@@ -603,7 +603,17 @@ class DotfileSync:
                 log_warning("\nNo items selected for sync")
                 return
         else:
-            selected_items = [item for item, _, _, _ in actionable]
+            selected_items = []
+            for item, status, description, action in actionable:
+                if action == 'copy_to_home' and (self.repo_dir / item).is_dir():
+                    log_warning(f"'{item}' exists in repo but not locally")
+                    if not prompt_yes_no(
+                        f"Copy new directory {Colors.BOLD}{item}{Colors.RESET} to home?",
+                        default=False,
+                    ):
+                        log(f"  Skipped {item}", Colors.RESET)
+                        continue
+                selected_items.append(item)
 
         log(f"\n{'='*50}", Colors.HEADER)
         log(f"SYNCING {len(selected_items)} ITEM(S)", Colors.HEADER + Colors.BOLD)
