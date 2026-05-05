@@ -68,15 +68,15 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 #   grep -rn "$1" --color=auto | fzf | awk -F: '{print "+" $2 " " $1}' | xargs -r nvim
 # }
 
-f() {
-  local EXCLUDE_DIRS="node_modules|.git|dist|build|venv|__pycache__|.history"
-  grep -rn "$1" --color=auto \
-    --exclude-dir={$EXCLUDE_DIRS} \
-    | fzf \
-    | awk -F: '{print "+" $2 " " $1}' \
-    | xargs -r nvim
-}
-
+# f() {
+#   local EXCLUDE_DIRS="node_modules|.git|dist|build|venv|__pycache__|.history"
+#   grep -rn "$1" --color=auto \
+#     --exclude-dir={$EXCLUDE_DIRS} \
+#     | fzf \
+#     | awk -F: '{print "+" $2 " " $1}' \
+#     | xargs -r nvim
+# }
+#
 # ---- END FZF AND FD SEARCH -----
 
 # alias glg='fzf_git_log' # Example alias
@@ -153,7 +153,20 @@ alias blog='cd git/tollefj.github.io'
 
 portkill() {
   local pids=$(lsof -ti :"$1")
-  [ -n "$pids" ] && kill -9 $pids
+  [ -z "$pids" ] && { echo "No processes on port $1"; return; }
+  ps -p $(echo $pids | tr '\n' ',') -o pid,user,command
+  echo -n "Kill these? [y/N] "
+  read ans
+  [ "$ans" = "y" ] && kill -9 ${=pids}
+}
+
+namekill() {
+  local pids=$(pgrep -f "$1")
+  [ -z "$pids" ] && { echo "No processes matching '$1'"; return; }
+  ps -p $(echo $pids | tr '\n' ',') -o pid,user,command
+  echo -n "Kill these? [y/N] "
+  read ans
+  [ "$ans" = "y" ] && kill -9 ${=pids}
 }
 
 # https://github.com/agnoster/agnoster-zsh-theme/issues/39
