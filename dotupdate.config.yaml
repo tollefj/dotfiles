@@ -6,6 +6,7 @@ ignore_items:
   - .git
   - .gitignore
   - .gitconfig
+  - .claude
 
   - dotupdate.py
   - dotupdate.config.yaml
@@ -23,3 +24,4 @@ ignore_items:
   - .config/menus/
   - .config/pudb/
   - .config/mgba/
+  - .config/platon

@@ -217,3 +217,11 @@ gls() {
 if [ -d "./.venv" ] && [ -f "./.venv/bin/activate" ]; then
     source ./.venv/bin/activate
 fi
+
+# pnpm
+export PNPM_HOME="/Users/tollef/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end

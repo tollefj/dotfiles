@@ -3,6 +3,7 @@
 *.swp
 
 # dotupdate managed
+.claude
 .config/Battle.net
 .config/configstore
 .config/filezilla
@@ -13,6 +14,7 @@
 .config/menus
 .config/mgba
 .config/mps-youtube
+.config/platon
 .config/pudb
 .git
 .gitconfig
