@@ -265,18 +265,78 @@ class GitSync:
         finally:
             self.pop_stash()
 
-    def commit_and_push(self, message: Optional[str] = None):
-        """Commit and push changes"""
+    def generate_commit_message(self) -> Optional[str]:
+        """
+        Ask the local 'claude' CLI to write a commit message from the staged diff.
+        Returns None if claude is unavailable or produces no usable message.
+        Changes must already be staged.
+        """
+        stat = self._run_git(["diff", "--cached", "--stat"], capture=True)
+        diff = self._run_git(["diff", "--cached"], capture=True)
+        if not diff:
+            return None
+
+        max_diff_chars = 12000
+        if len(diff) > max_diff_chars:
+            diff = diff[:max_diff_chars] + "\n... [diff truncated]"
+
+        context = f"Changed files:\n{stat}\n\nDiff:\n{diff}"
+        prompt = (
+            "Write a concise git commit message for the following staged dotfiles "
+            "changes. Use imperative mood and a short summary line. Output only the "
+            "commit message text: no explanation, no code fences, and no trailers "
+            "or co-author lines."
+        )
+
+        try:
+            result = subprocess.run(
+                ["claude", "-p", prompt],
+                cwd=self.repo_dir,
+                input=context,
+                capture_output=True,
+                text=True,
+                check=True,
+                timeout=120,
+            )
+        except (subprocess.CalledProcessError, FileNotFoundError, subprocess.TimeoutExpired) as e:
+            log_warning(f"Claude message generation failed: {e}")
+            return None
+
+        message = result.stdout.strip()
+        if message.startswith("```"):
+            message = "\n".join(
+                line for line in message.splitlines()
+                if not line.strip().startswith("```")
+            ).strip()
+        return message or None
+
+    def commit_changes(self):
+        """
+        Stage and commit changes.
+
+        When the 'claude' CLI is on PATH it generates the commit message and the
+        change is committed WITHOUT pushing (push stays manual). When claude is
+        unavailable, falls back to an automated timestamped commit and push.
+        """
         if not self.has_changes():
             log_info("No changes to commit")
             return
 
-        if message is None:
-            timestamp = time.strftime("%H:%M - %d/%m/%y")
-            message = f"Automated commit at {timestamp}"
-
-        log_info(f"Committing: {message}")
         self._run_git(["add", "-A"])
+
+        if shutil.which("claude"):
+            log_info("Generating commit message with claude...")
+            message = self.generate_commit_message()
+            if message:
+                log_info(f"Committing: {message}")
+                self._run_git(["commit", "-m", message])
+                log_success("Changes committed. Push manually with: git push")
+                return
+            log_warning("No message from claude - using automated commit")
+
+        timestamp = time.strftime("%H:%M - %d/%m/%y")
+        message = f"Automated commit at {timestamp}"
+        log_info(f"Committing: {message}")
         self._run_git(["commit", "-m", message])
         self._run_git(["push"])
         log_success("Changes committed and pushed")
@@ -673,7 +733,7 @@ def main():
             log(f"\n{'='*50}", Colors.HEADER)
             log("COMMITTING CHANGES", Colors.HEADER + Colors.BOLD)
             log(f"{'='*50}\n", Colors.HEADER)
-            git.commit_and_push()
+            git.commit_changes()
         else:
             log_info("\nNo repository changes to commit")
 
