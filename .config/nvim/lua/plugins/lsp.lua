@@ -20,8 +20,9 @@ return {
 		"hrsh7th/cmp-path",
 		"hrsh7th/cmp-cmdline",
 		"hrsh7th/nvim-cmp",
-		-- "L3MON4D3/LuaSnip",
-		-- "saadparwaiz1/cmp_luasnip",
+		{ "L3MON4D3/LuaSnip", version = "v2.*", build = "make install_jsregexp" },
+		"saadparwaiz1/cmp_luasnip",
+		"rafamadriz/friendly-snippets",
 		"j-hui/fidget.nvim",
 	},
 
@@ -114,6 +115,12 @@ return {
 			},
 		})
 
+		require("luasnip.loaders.from_vscode").lazy_load()
+		require("luasnip.loaders.from_lua").lazy_load({
+			paths = vim.fn.stdpath("config") .. "/snippets",
+		})
+		require("luasnip").filetype_extend("typescriptreact", { "typescript" })
+
 		local cmp_select = { behavior = cmp.SelectBehavior.Select }
 
 		cmp.setup({
@@ -125,13 +132,34 @@ return {
 			mapping = cmp.mapping.preset.insert({
 				["<C-p>"] = cmp.mapping.select_prev_item(cmp_select),
 				["<C-n>"] = cmp.mapping.select_next_item(cmp_select),
-				["<C-y>"] = cmp.mapping.confirm({ select = true }),
+				["<Tab>"] = cmp.mapping(function(fallback)
+					local fim = require("local-fim")
+					if fim.has_suggestion() then
+						fim.accept()
+					elseif cmp.visible() then
+						cmp.confirm({ select = true })
+					else
+						fallback()
+					end
+				end, { "i", "s" }),
 				["<C-Space>"] = cmp.mapping.complete(),
+				["<C-l>"] = cmp.mapping(function()
+					local luasnip = require("luasnip")
+					if luasnip.expand_or_jumpable() then
+						luasnip.expand_or_jump()
+					end
+				end, { "i", "s" }),
+				["<C-h>"] = cmp.mapping(function()
+					local luasnip = require("luasnip")
+					if luasnip.jumpable(-1) then
+						luasnip.jump(-1)
+					end
+				end, { "i", "s" }),
 			}),
 			sources = cmp.config.sources({
-				{ name = "copilot", group_index = 2 },
 				{ name = "nvim_lsp" },
-				{ name = "luasnip" }, -- For luasnip users.
+				{ name = "luasnip" },
+				{ name = "path" },
 			}, {
 				{ name = "buffer" },
 			}),

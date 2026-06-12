@@ -100,12 +100,13 @@ map("n", "<C-ø>", "<cmd>cnext<CR>zz", { desc = "Next quickfix item" })
 map("n", "<C-æ>", "<cmd>cprev<CR>zz", { desc = "Previous quickfix item" })
 map("n", "<leader>ø", "<cmd>lnext<CR>zz", { desc = "Next location list item" })
 map("n", "<leader>æ", "<cmd>lprev<CR>zz", { desc = "Previous location list item" })
-map(
-	"n",
-	"<leader>s",
-	[[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]],
-	{ desc = "Search and replace current word" }
-)
+-- <leader>s is now grug-far's apply/replace action (see lua/plugins/grug-far.lua)
+-- map(
+-- 	"n",
+-- 	"<leader>s",
+-- 	[[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]],
+-- 	{ desc = "Search and replace current word" }
+-- )
 map("n", "<leader>x", "<cmd>!chmod +x %<CR>", { desc = "Make current file executable" })
 map("n", "<C-,>", "<cmd>bprevious<CR>", { desc = "Previous buffer" })
 map("n", "<C-.>", "<cmd>bnext<CR>", { desc = "Next buffer" })
@@ -170,5 +171,5 @@ end, {
 	range = true, -- works on visual selections or explicit ranges
 })
 
--- Load plugins
+-- Load plugins (local-fim is a lazy spec in lua/plugins/local-fim.lua)
 require("config.lazy")
