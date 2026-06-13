@@ -1,6 +1,11 @@
 # Configuration for dotupdate.py
 # Files and directories to ignore when discovering dotfiles in the repository
 
+# Basenames ignored at any depth (not anchored to a path)
+ignore_names:
+  - .DS_Store
+
+# Exact relative paths ignored from the repo root
 ignore_items:
   - old
   - .git

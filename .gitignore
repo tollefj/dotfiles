@@ -1,5 +1,6 @@
 __pycache__
 *.DS_Store
+.DS_Store
 *.txt
 *.swp
 
@@ -19,7 +20,6 @@ __pycache__
 .config/pudb
 .git
 .gitconfig
-.gitignore
 Makefile
 dotupdate.config.yaml
 dotupdate.py

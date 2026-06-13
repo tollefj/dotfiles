@@ -99,7 +99,7 @@ def load_yaml_config(config_path: Path) -> Dict[str, Any]:
     Load YAML config file without external dependencies.
     Simple parser for basic YAML lists.
     """
-    config = {'ignore_items': []}
+    config = {'ignore_items': [], 'ignore_names': []}
 
     if not config_path.exists():
         return config
@@ -128,8 +128,8 @@ def load_yaml_config(config_path: Path) -> Dict[str, Any]:
                     item = line.strip()[1:].strip()
                     # Remove quotes if present
                     item = item.strip('"').strip("'")
-                    if current_key == 'ignore_items':
-                        config['ignore_items'].append(item)
+                    if current_key in ('ignore_items', 'ignore_names'):
+                        config[current_key].append(item)
 
         return config
     except Exception as e:
@@ -345,31 +345,35 @@ class GitSync:
 class DotfileSync:
     """Handles dotfile synchronization between home and repo"""
 
-    def __init__(self, home_dir: Path, repo_dir: Path, ignore_items: Set[str] = None):
+    def __init__(self, home_dir: Path, repo_dir: Path,
+                 ignore_items: Set[str] = None, ignore_names: Set[str] = None):
         self.home_dir = home_dir
         self.repo_dir = repo_dir
         self.repo_modified = False
         self.ignore_items = {item.rstrip('/') for item in (ignore_items or set())}
+        self.ignore_names = set(ignore_names or set())
 
     @staticmethod
     def get_mtime(path: Path) -> float:
         """Get modification time of file or directory"""
         return path.stat().st_mtime
 
-    @staticmethod
-    def contents_match(path1: Path, path2: Path) -> bool:
+    def contents_match(self, path1: Path, path2: Path) -> bool:
         """Check if two paths have identical content (files or directories)"""
         if path1.is_file() and path2.is_file():
             return filecmp.cmp(path1, path2, shallow=False)
         if path1.is_dir() and path2.is_dir():
-            return DotfileSync._dirs_match(path1, path2)
+            return self._dirs_match(path1, path2)
         return False
 
-    @staticmethod
-    def _dirs_match(dir1: Path, dir2: Path) -> bool:
+    def _ignored_name(self, name: str) -> bool:
+        """True if a basename should be skipped everywhere (.git or configured)"""
+        return name == '.git' or name in self.ignore_names
+
+    def _dirs_match(self, dir1: Path, dir2: Path) -> bool:
         """Recursively check if two directories have identical file content"""
-        entries1 = {e.name for e in dir1.iterdir() if e.name != '.git'}
-        entries2 = {e.name for e in dir2.iterdir() if e.name != '.git'}
+        entries1 = {e.name for e in dir1.iterdir() if not self._ignored_name(e.name)}
+        entries2 = {e.name for e in dir2.iterdir() if not self._ignored_name(e.name)}
         if entries1 != entries2:
             return False
         for name in entries1:
@@ -384,7 +388,7 @@ class DotfileSync:
                 if not filecmp.cmp(p1, p2, shallow=False):
                     return False
             elif p1.is_dir() and p2.is_dir():
-                if not DotfileSync._dirs_match(p1, p2):
+                if not self._dirs_match(p1, p2):
                     return False
             elif not p1.is_file() and not p1.is_dir():
                 # Special files (sockets, FIFOs, devices) — skip comparison
@@ -408,7 +412,7 @@ class DotfileSync:
         dest.mkdir(parents=True, exist_ok=True)
 
         for item in src.iterdir():
-            if item.name == '.git':
+            if self._ignored_name(item.name):
                 continue
             src_item = src / item.name
             dest_item = dest / item.name
@@ -449,8 +453,13 @@ class DotfileSync:
         for item in self.repo_dir.iterdir():
             name = item.name
 
-            # Skip ignored items
-            if name in self.ignore_items:
+            # Skip ignored items (exact path or basename rule)
+            if name in self.ignore_items or self._ignored_name(name):
+                continue
+
+            # .config is a container; sync its subdirectories individually
+            # (handled below) rather than as one whole-folder unit.
+            if name == '.config':
                 continue
 
             # Include dotfiles (starting with .)
@@ -463,11 +472,11 @@ class DotfileSync:
         # Scan .config directory if it exists
         config_dir = self.repo_dir / '.config'
         if config_dir.exists() and config_dir.is_dir():
-            for subdir in config_dir.iterdir():
-                if subdir.is_dir():
-                    rel_path = f'.config/{subdir.name}'
-                    if rel_path not in self.ignore_items:
-                        discovered.append(rel_path)
+            for entry in config_dir.iterdir():
+                rel_path = f'.config/{entry.name}'
+                if rel_path in self.ignore_items or self._ignored_name(entry.name):
+                    continue
+                discovered.append(rel_path)
 
         return sorted(discovered)
 
@@ -711,9 +720,13 @@ def main():
     config_path = repo_dir / "dotupdate.config.yaml"
     config = load_yaml_config(config_path)
     ignore_items = set(config.get('ignore_items', []))
+    ignore_names = set(config.get('ignore_names', []))
 
-    if ignore_items:
-        log_info(f"Loaded {len(ignore_items)} ignore rule(s) from config")
+    if ignore_items or ignore_names:
+        log_info(
+            f"Loaded {len(ignore_items)} path rule(s) and "
+            f"{len(ignore_names)} name rule(s) from config"
+        )
 
     try:
         # Step 1: Git sync (pull latest)
@@ -722,10 +735,10 @@ def main():
             log_warning("Git sync incomplete - continuing anyway")
 
         # Step 2: Keep .gitignore in sync with ignore list
-        sync_gitignore(repo_dir, ignore_items)
+        sync_gitignore(repo_dir, ignore_items | ignore_names)
 
         # Step 3: Dotfile sync
-        dotfiles = DotfileSync(home_dir, repo_dir, ignore_items)
+        dotfiles = DotfileSync(home_dir, repo_dir, ignore_items, ignore_names)
         dotfiles.sync_all(interactive=args.interactive)
 
         # Step 3: Commit and push if needed
