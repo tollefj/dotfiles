@@ -20,6 +20,7 @@ __pycache__
 .config/pudb
 .git
 .gitconfig
+.gitignore
 Makefile
 dotupdate.config.yaml
 dotupdate.py
