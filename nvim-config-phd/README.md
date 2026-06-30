@@ -1,2 +1,0 @@
-# NVIM actually working wtf
-
