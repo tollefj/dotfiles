@@ -1,27 +1,11 @@
-__pycache__
-*.DS_Store
 .DS_Store
-*.txt
 *.swp
+__pycache__
 
-# dotupdate managed
-.claude
-.config/Battle.net
-.config/configstore
-.config/filezilla
-.config/gcloud
-.config/github-copilot
-.config/iterm2/AppSupport
-.config/iterm2/sockets
-.config/menus
-.config/mgba
-.config/mps-youtube
-.config/platon
-.config/pudb
-.git
-.gitconfig
-.gitignore
-Makefile
-dotupdate.config.yaml
-dotupdate.py
-old
+# Stowed packages must stay tracked; ignore only local-only state.
+.config/gh/hosts.yml
+*.old
+
+# Self-managed git repos that live in ~ but are NOT part of dotfiles.
+# (~/.claude has its own remote: github.com/tollefj/.claude)
+.claude/
