@@ -37,13 +37,20 @@
 [core]
 	editor = vim -v
 	excludesfile = ~/.gitignore_global
-[user]
-	name = Tollef Jørgensen
-	email = tollefj@gmail.com
 [credential]
 	helper = store
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
-	required = true
+  required = true
+
+[user]
+	name = Tollef Jørgensen
+	email = tollefj@gmail.com
+
+[includeIf "gitdir:~/work/"]
+    path = ~/.gitconfig-Sikt
+
+[includeIf "gitdir:~/sikt/"]
+    path = ~/.gitconfig-Sikt
