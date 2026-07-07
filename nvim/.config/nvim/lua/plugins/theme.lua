@@ -1,18 +1,17 @@
 return {
-	"sainnhe/everforest",
+	"folke/tokyonight.nvim",
 	priority = 1000,
 	config = function()
-		vim.g.everforest_background = "hard"
-		vim.g.everforest_better_performance = 1
-		vim.g.everforest_enable_italic = 0
+		require("tokyonight").setup({
+			style = "storm",
+		})
 
 		local function update_theme()
 			if vim.o.background == "light" then
-				vim.o.background = "light"
+				vim.cmd.colorscheme("tokyonight-day")
 			else
-				vim.o.background = "dark"
+				vim.cmd.colorscheme("tokyonight-storm")
 			end
-			vim.cmd.colorscheme("everforest")
 		end
 
 		vim.api.nvim_create_autocmd("OptionSet", {
