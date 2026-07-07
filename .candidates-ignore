@@ -1,0 +1,111 @@
+# Glob patterns (relative to $HOME), one per line, matched against `make candidates`
+# output. Add a line whenever the scan surfaces noise you don't want tracked.
+.DS_Store
+.config/.DS_Store
+.Trash
+.Trash/*
+
+# secrets / credentials — never belong in a dotfiles repo
+.ssh
+.ssh/*
+.gnupg
+.gnupg/*
+.aws
+.aws/*
+.kube
+.kube/*
+.vault-token
+.platon-kubectl-auth.json
+.mcp-auth
+.mcp-auth/*
+
+# shell/tool history and session state
+.bash_history
+.zsh_history
+.python_history
+.psql_history
+.zsh_sessions
+.zsh_sessions/*
+.zcompdump*
+.lesshst
+.viminfo
+.wget-hsts
+
+# package manager / language toolchain caches
+.cache
+.cache/*
+.npm
+.npm/*
+.cargo
+.cargo/*
+.rustup
+.rustup/*
+.local
+.local/*
+.mix
+.mix/*
+.ipython
+.ipython/*
+.jupyter
+.jupyter/*
+.matplotlib
+.matplotlib/*
+.pypirc
+.swiftpm
+.swiftpm/*
+
+# editor/IDE state, not config
+.vscode
+.vscode/*
+.vscode-oss
+.vscode-oss/*
+.vscode-oss-shared
+.vscode-oss-shared/*
+
+# oh-my-zsh is its own managed install, not a dotfile
+.oh-my-zsh
+.oh-my-zsh/*
+
+# self-managed repos with their own remote (see .gitignore)
+.claude
+.claude/*
+.claude.json
+.claude.json.backup
+
+# misc app state under ~/.config
+.config/configstore
+.config/configstore/*
+.config/cagent
+.config/cagent/*
+.config/platon
+.config/platon/*
+.config/uv
+.config/uv/*
+.config/gtk-3.0
+.config/gtk-3.0/*
+
+# cloud-sync placeholders
+.Box_*
+.CFUserTextEncoding
+.docker
+.docker/*
+
+# app runtime state / stray writes, not config
+.config/.claude
+.config/.claude/*
+.config/.config
+.config/.config/*
+.config/btop/btop.log
+.config/btop/themes
+.config/btop/themes/*
+.config/gh/hosts.yml
+.config/iterm2/.DS_Store
+.config/iterm2/AppSupport
+.config/iterm2/AppSupport/*
+.config/iterm2/sockets
+.config/iterm2/sockets/*
+.config/nvim/.git
+.config/nvim/.git/*
+.config/nvim/*.old
+.config/nvim/lua/plugins/*.old
+.config/nvim/lua/plugins/*.oldv2
