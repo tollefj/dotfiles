@@ -10,6 +10,8 @@ brew "ffmpeg"
 brew "fzf"
 # LLM inference in C/C++
 brew "llama.cpp"
+# Organize software neatly under a single directory tree (symlink farm manager)
+brew "stow"
 # Polyglot runtime manager (asdf rust clone)
 brew "mise"
 # Ambitious Vim-fork focused on extensibility and agility

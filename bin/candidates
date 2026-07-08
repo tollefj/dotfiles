@@ -1,0 +1,65 @@
+#!/usr/bin/env bash
+# Scan $HOME for dotfiles/dirs not yet stowed into this repo.
+#
+# Only descends into a directory once it already has at least one stowed
+# (managed) entry inside it — that's a signal it's a config location worth
+# looking at closer (e.g. ~/.config). Directories with no stowed presence
+# at all are reported as a single candidate, not walked file by file.
+#
+# Tune false positives by adding glob patterns (relative to $HOME) to
+# .candidates-ignore, one per line.
+set -euo pipefail
+
+DOTFILES="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+IGNORE_FILE="$DOTFILES/.candidates-ignore"
+HOME_DIR="$HOME"
+
+is_ignored() {
+	local rel="$1" pattern
+	[[ -f "$IGNORE_FILE" ]] || return 1
+	while IFS= read -r pattern; do
+		[[ -z "$pattern" || "$pattern" == \#* ]] && continue
+		# shellcheck disable=SC2053
+		[[ "$rel" == $pattern ]] && return 0
+	done <"$IGNORE_FILE"
+	return 1
+}
+
+is_managed() {
+	local path="$1" target
+	[[ -L "$path" ]] || return 1
+	target="$(cd "$(dirname "$path")" && realpath "$(readlink "$path")" 2>/dev/null)" || return 1
+	[[ "$target" == "$DOTFILES"/* ]]
+}
+
+has_managed_descendant() {
+	local dir="$1" entry
+	shopt -s dotglob nullglob
+	for entry in "$dir"/*; do
+		is_managed "$entry" && return 0
+		[[ -d "$entry" && ! -L "$entry" ]] && has_managed_descendant "$entry" && return 0
+	done
+	return 1
+}
+
+scan_dir() {
+	local dir="$1" hidden_only="$2" entry name rel
+	shopt -s dotglob nullglob
+	for entry in "$dir"/*; do
+		name="$(basename "$entry")"
+		if [[ "$hidden_only" == "1" && "$name" != .* ]]; then
+			continue
+		fi
+		[[ "$name" == "." || "$name" == ".." ]] && continue
+		rel="${entry#"$HOME_DIR"/}"
+		is_managed "$entry" && continue
+		is_ignored "$rel" && continue
+		if [[ -d "$entry" && ! -L "$entry" ]] && has_managed_descendant "$entry"; then
+			scan_dir "$entry" 0
+		else
+			echo "$rel"
+		fi
+	done
+}
+
+scan_dir "$HOME_DIR" 1 | sort

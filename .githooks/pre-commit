@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# Block any embedded git repository (gitlink, mode 160000) from being committed.
+# Directories that carry their own .git are self-managed repos (e.g. ~/.claude
+# with its own remote) and must never be absorbed into the dotfiles tree.
+set -euo pipefail
+
+gitlinks=$(git diff --cached --raw | awk '$2 == "160000" { print $6 }')
+
+if [ -n "$gitlinks" ]; then
+	echo "✗ Refusing to commit: embedded git repo(s) staged as gitlinks:" >&2
+	echo "$gitlinks" | sed 's/^/    /' >&2
+	echo "" >&2
+	echo "These are self-managed repos, not dotfiles. Unstage them with:" >&2
+	echo "$gitlinks" | sed 's/^/    git restore --staged /' >&2
+	echo "and add the path to .gitignore so they stay out of this tree." >&2
+	exit 1
+fi
