@@ -14,7 +14,6 @@ alias py3virtual='virtualenv -p python3 venv; source venv/bin/activate'
 
 alias bashprof='nvim ~/.bash_profile'
 alias z='nvim ~/.zshrc'
-alias vimrc='nvim ~/.vimrc'
 alias vim="nvim"
 alias nv="vim ~/.config/nvim"
 alias alac="vim ~/.config/alacritty/alacritty.toml"

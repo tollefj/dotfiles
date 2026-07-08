@@ -124,7 +124,6 @@ alias py3virtual='python3 -m venv .venv; source .venv/bin/activate'
 alias bashprof='nvim ~/.bash_profile'
 alias z='nvim ~/.zshrc'
 alias claudeconf='nvim /Users/tollef/Library/"Application Support"/Claude/claude_desktop_config.json'
-alias vimrc='nvim ~/.vimrc'
 alias vim="nvim"
 alias nv="vim ~/.config/nvim"
 alias alac="vim ~/.config/alacritty/alacritty.toml"

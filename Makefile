@@ -19,7 +19,10 @@
 MAKEFLAGS += --no-print-directory
 DOTFILES := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 STOW     := stow --dir="$(DOTFILES)" --target="$(HOME)"
-PACKAGES := shell bash vim git nvim tmux btop gh zathura zsh iterm2
+# Every top-level directory is a stow package, except tooling dirs that
+# aren't meant to be linked into $(HOME).
+NON_PACKAGE_DIRS := bin ~
+PACKAGES := $(filter-out $(NON_PACKAGE_DIRS),$(patsubst %/,%,$(wildcard */)))
 
 .DEFAULT_GOAL := link
 .PHONY: link adopt unlink hooks candidates new move
@@ -54,7 +57,6 @@ new:
 	@$(STOW) --adopt --restow $(NAME)
 	@echo "Adopted $(HOME)/$(FILE) into $(NAME)/$(FILE)."
 	@echo "Review:  git -C $(DOTFILES) diff -- $(NAME)"
-	@echo "Then add '$(NAME)' to PACKAGES in the Makefile."
 
 move:
 	@dest=$$(echo $(NEW)); \
