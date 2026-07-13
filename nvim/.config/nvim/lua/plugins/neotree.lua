@@ -13,12 +13,14 @@ return {
 				filtered_items = {
 					visible = true,
 				},
+				follow_current_file = {
+					enabled = true,
+					leave_dirs_open = false,
+				},
 			},
 		},
-		config = function()
-			require("neo-tree").setup({
-				-- Your custom configurations here
-			})
+		config = function(_, opts)
+			require("neo-tree").setup(opts)
 		end,
 	},
 }
