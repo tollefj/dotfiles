@@ -13,8 +13,8 @@ return {
 	"neovim/nvim-lspconfig",
 	dependencies = {
 		"stevearc/conform.nvim",
-		"williamboman/mason.nvim",
-		"williamboman/mason-lspconfig.nvim",
+		"mason-org/mason.nvim",
+		"mason-org/mason-lspconfig.nvim",
 		"hrsh7th/cmp-nvim-lsp",
 		"hrsh7th/cmp-buffer",
 		"hrsh7th/cmp-path",
@@ -40,6 +40,28 @@ return {
 		)
 
 		require("fidget").setup({})
+
+		vim.api.nvim_create_autocmd("LspAttach", {
+			group = vim.api.nvim_create_augroup("UserLspAttach", { clear = true }),
+			callback = function(event)
+				local map = function(mode, lhs, rhs, desc)
+					vim.keymap.set(mode, lhs, rhs, { buffer = event.buf, desc = "LSP: " .. desc })
+				end
+
+				map("n", "gd", vim.lsp.buf.definition, "Go to definition")
+				map("n", "gD", vim.lsp.buf.declaration, "Go to declaration")
+				map("n", "gr", vim.lsp.buf.references, "Find references")
+				map("n", "gi", vim.lsp.buf.implementation, "Go to implementation")
+				map("n", "gy", vim.lsp.buf.type_definition, "Go to type definition")
+				map("n", "K", vim.lsp.buf.hover, "Hover documentation")
+				map("n", "<leader>rn", vim.lsp.buf.rename, "Rename symbol")
+				map({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, "Code action")
+				map("n", "[d", vim.diagnostic.goto_prev, "Previous diagnostic")
+				map("n", "]d", vim.diagnostic.goto_next, "Next diagnostic")
+				map("n", "<leader>dd", vim.diagnostic.open_float, "Show diagnostic")
+			end,
+		})
+
 		require("mason").setup()
 		require("mason-lspconfig").setup({
 			ensure_installed = {
@@ -69,25 +91,6 @@ return {
 					vim.g.zig_fmt_parse_errors = 0
 					vim.g.zig_fmt_autosave = 0
 				end,
-				-- ["lua_ls"] = function()
-				-- 	local lspconfig = require("lspconfig")
-				-- 	lspconfig.lua_ls.setup({
-				-- 		capabilities = capabilities,
-				-- 		settings = {
-				-- 			Lua = {
-				-- 				format = {
-				-- 					enable = true,
-				-- 					-- Put format options here
-				-- 					-- NOTE: the value should be STRING!!
-				-- 					defaultConfig = {
-				-- 						indent_style = "space",
-				-- 						indent_size = "2",
-				-- 					},
-				-- 				},
-				-- 			},
-				-- 		},
-				-- 	})
-				-- end,
 				["pyright"] = function()
 					local lspconfig = require("lspconfig")
 					lspconfig.pyright.setup({

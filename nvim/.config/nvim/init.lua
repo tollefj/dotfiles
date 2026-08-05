@@ -113,7 +113,8 @@ map("n", "<C-.>", "<cmd>bnext<CR>", { desc = "Next buffer" })
 map("n", "<leader>tn", ":tabnew<CR>", { desc = "New tab" })
 map("n", "<leader>tx", ":tabclose<CR>", { desc = "Close tab" })
 map("n", "<leader>b", "<cmd>Telescope bibtex<CR>", { desc = "Telescope BibTeX" })
-map("n", "gd", vim.lsp.buf.definition, { desc = "LSP Go to Definition" })
+-- LSP keymaps (gd, gr, gD, gi, K, <leader>rn, <leader>ca, [d/]d) are set
+-- buffer-locally on LspAttach in lua/plugins/lsp.lua
 
 -- Autocmds
 local augroup = api.nvim_create_augroup("MyAutocmds", { clear = true })
