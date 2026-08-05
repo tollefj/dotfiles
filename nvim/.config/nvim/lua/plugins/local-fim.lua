@@ -1,4 +1,4 @@
--- Local FIM completion (Mellum via llama-server). Published standalone at
+-- Local FIM completion (Qwen3.5-4B via llama-server). Published standalone at
 -- https://github.com/tollefj/local-fim.nvim; lazy clones it and puts its lua/ on
 -- runtimepath so require("local-fim") and :checkhealth local-fim resolve. Loaded
 -- on VimEnter so it can offer to start the llama-server when you open nvim
@@ -8,7 +8,7 @@ return {
 	event = "VimEnter",
 	opts = {
 		endpoint = "http://127.0.0.1:8012",
-		profile = "qwen2.5-coder",
+		profile = "qwen3.5-4b",
 	},
 	config = function(_, opts)
 		local fim = require("local-fim")
