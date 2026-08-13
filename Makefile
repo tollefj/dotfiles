@@ -3,7 +3,12 @@
 # so daily edits need NO make target. Mirror across machines with git push/pull.
 #
 #   make              link/refresh symlinks (run only after adding NEW files)
-#   make adopt        first time on a machine: absorb existing ~ files, then link
+#   make update       check every package for drift vs ~, restow only what changed
+#   make claim        NEW MACHINE default: repo wins over ~, prompts before
+#                       overwriting each real conflicting file (e.g. a default
+#                       ~/.zshrc created before this repo was cloned)
+#   make adopt        opposite direction: absorb existing ~ files into the
+#                       repo (device wins), then link — no prompts
 #   make unlink       remove all symlinks from ~
 #   make candidates   list ~ files/dirs not yet stowed (tune noise in .candidates-ignore)
 #   make new          scaffold a package from a candidate and stow it, e.g.:
@@ -25,7 +30,7 @@ NON_PACKAGE_DIRS := bin ~
 PACKAGES := $(filter-out $(NON_PACKAGE_DIRS),$(patsubst %/,%,$(wildcard */)))
 
 .DEFAULT_GOAL := link
-.PHONY: link adopt unlink hooks candidates new move
+.PHONY: link update claim adopt unlink hooks candidates new move
 
 hooks:
 	@git -C $(DOTFILES) config core.hooksPath .githooks
@@ -33,6 +38,12 @@ hooks:
 link: hooks
 	@$(STOW) --restow $(PACKAGES)
 	@echo "Linked: $(PACKAGES)"
+
+update: hooks
+	@$(DOTFILES)/bin/update
+
+claim: hooks
+	@$(DOTFILES)/bin/claim
 
 adopt: hooks
 	@$(STOW) --adopt --restow $(PACKAGES)

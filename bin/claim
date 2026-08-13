@@ -1,0 +1,88 @@
+#!/usr/bin/env bash
+# Repo-wins bootstrap for a fresh machine. For every package, find real
+# files in $HOME that collide with where the repo's symlink should be
+# (e.g. a default ~/.zshrc the OS/shell created before this repo was
+# cloned), show a diff, and ask before replacing them with the repo's
+# version. Declined files are left untouched and reported; that package is
+# skipped so nothing gets silently overwritten.
+#
+# This is the opposite direction from `make adopt`, which pulls $HOME's
+# real content INTO the repo. `claim` pushes the repo's content OUT to
+# $HOME, one confirmed file at a time.
+set -euo pipefail
+
+DOTFILES="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+HOME_DIR="$HOME"
+NON_PACKAGE_DIRS=(bin "~")
+
+is_non_package() {
+	local name="$1" p
+	for p in "${NON_PACKAGE_DIRS[@]}"; do
+		[[ "$name" == "$p" ]] && return 0
+	done
+	return 1
+}
+
+confirm() {
+	local prompt="$1" reply
+	read -r -p "$prompt [y/N] " reply </dev/tty
+	[[ "$reply" =~ ^[Yy]$ ]]
+}
+
+to_claim=()
+declined=0
+
+for pkg_path in "$DOTFILES"/*/; do
+	pkg="$(basename "$pkg_path")"
+	is_non_package "$pkg" && continue
+	pkg_dir="${pkg_path%/}"
+	pkg_blocked=0
+
+	while IFS= read -r -d '' entry; do
+		rel="${entry#"$pkg_dir"/}"
+		target="$HOME_DIR/$rel"
+
+		if [[ -L "$target" ]]; then
+			resolved="$(cd "$(dirname "$target")" 2>/dev/null && realpath "$(readlink "$target")" 2>/dev/null)" || resolved=""
+			[[ "$resolved" == "$(realpath "$entry")" ]] && continue
+			echo
+			echo "conflict: $target is a symlink pointing elsewhere -> $(readlink "$target")"
+		elif [[ -e "$target" ]]; then
+			echo
+			echo "conflict: $target already exists (repo has $pkg/$rel)"
+			if [[ -f "$target" ]] && command -v diff >/dev/null 2>&1; then
+				diff -u "$target" "$entry" || true
+			fi
+		else
+			continue
+		fi
+
+		if confirm "Overwrite $target with the repo's version?"; then
+			rm -rf "$target"
+			echo "  -> cleared, will relink from repo"
+		else
+			echo "  -> kept as-is"
+			pkg_blocked=1
+			declined=$((declined + 1))
+		fi
+	done < <(find "$pkg_dir" -type f -print0)
+
+	if [[ "$pkg_blocked" -eq 0 ]]; then
+		to_claim+=("$pkg")
+	else
+		echo "Skipping restow for '$pkg' - resolve the declined file(s) above, then rerun 'make claim'."
+	fi
+done
+
+if [[ ${#to_claim[@]} -gt 0 ]]; then
+	echo
+	echo "Restowing: ${to_claim[*]}"
+	stow --dir="$DOTFILES" --target="$HOME_DIR" --restow "${to_claim[@]}"
+fi
+
+if [[ "$declined" -gt 0 ]]; then
+	echo "Done, with $declined file(s) left unresolved."
+	exit 1
+fi
+
+echo "Done. Repo now owns every package."

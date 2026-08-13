@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+# Check every stow package for drift against $HOME and re-stow only the
+# packages that changed.
+#
+# "Drift" means: a file that exists in a repo package doesn't map to a
+# symlink in $HOME pointing back at it — the link is missing, points
+# elsewhere, or $HOME has a real file/dir sitting where the symlink should
+# be. Packages with no drift are left alone; only the ones that need it get
+# `stow -R`, so this is safe to run often and won't touch unrelated state.
+set -euo pipefail
+
+DOTFILES="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+HOME_DIR="$HOME"
+NON_PACKAGE_DIRS=(bin "~")
+
+is_non_package() {
+	local name="$1" p
+	for p in "${NON_PACKAGE_DIRS[@]}"; do
+		[[ "$name" == "$p" ]] && return 0
+	done
+	return 1
+}
+
+package_needs_stow() {
+	local pkg_dir="${1%/}" entry rel target resolved
+	while IFS= read -r -d '' entry; do
+		rel="${entry#"$pkg_dir"/}"
+		target="$HOME_DIR/$rel"
+		if [[ -L "$target" ]]; then
+			resolved="$(cd "$(dirname "$target")" 2>/dev/null && realpath "$(readlink "$target")" 2>/dev/null)" || return 0
+			[[ "$resolved" == "$(realpath "$entry")" ]] || return 0
+		else
+			return 0
+		fi
+	done < <(find "$pkg_dir" -type f -print0)
+	return 1
+}
+
+changed=()
+for pkg_path in "$DOTFILES"/*/; do
+	pkg="$(basename "$pkg_path")"
+	is_non_package "$pkg" && continue
+	if package_needs_stow "$pkg_path"; then
+		changed+=("$pkg")
+	fi
+done
+
+if [[ ${#changed[@]} -eq 0 ]]; then
+	echo "Nothing to update — all packages already linked."
+	exit 0
+fi
+
+echo "Drift found in: ${changed[*]}"
+stow --dir="$DOTFILES" --target="$HOME_DIR" --restow "${changed[@]}"
+echo "Updated: ${changed[*]}"
