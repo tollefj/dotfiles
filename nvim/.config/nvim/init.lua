@@ -157,6 +157,13 @@ map("n", "<leader>pa", function()
 	print("file:", path)
 end, { desc = "Copy full file path" })
 
+-- Copy file path relative to the root folder nvim was started in
+map("n", "<leader>cp", function()
+	local path = vim.fn.expand("%:.")
+	vim.fn.setreg("+", path)
+	print("file:", path)
+end, { desc = "Copy relative file path" })
+
 -- Clear LaTeX commands in a visual selection or range
 vim.api.nvim_create_user_command("ClearLatex", function(opts)
 	local cmd = opts.args
