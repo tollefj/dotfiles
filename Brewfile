@@ -1,5 +1,7 @@
 tap "hashicorp/tap"
 tap "mostlygeek/llama-swap"
+tap "felixkratz/formulae"
+tap "nikitabobko/tap"
 # Cross-platform make
 brew "cmake"
 # Simple, fast and user-friendly alternative to find
@@ -34,10 +36,14 @@ brew "wget"
 brew "xcodegen"
 # Fish shell like syntax highlighting for zsh
 brew "zsh-syntax-highlighting"
+# Custom macOS statusbar with shell plugin, interaction and graph support
+brew "felixkratz/formulae/sketchybar"
 # Vault
 brew "hashicorp/tap/vault"
 # Proxy server for swapping models on llama.cpp
 brew "mostlygeek/llama-swap/llama-swap"
+# AeroSpace is an i3-like tiling window manager for macOS
+cask "nikitabobko/tap/aerospace"
 # Open source IDE for exploring and testing APIs
 cask "bruno"
 # Full TeX Live distribution with GUI applications

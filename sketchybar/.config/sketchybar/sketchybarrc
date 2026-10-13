@@ -1,0 +1,56 @@
+#!/bin/bash
+PLUGIN_DIR="$CONFIG_DIR/plugins"
+
+# Catppuccin Mocha
+BASE=0xff1e1e2e
+TEXT=0xffcdd6f4
+ACCENT=0xff89b4fa
+
+sketchybar --bar position=top height=32 y_offset=4 margin=10 \
+  corner_radius=8 color=$BASE padding_left=8 padding_right=8
+
+sketchybar --default \
+  icon.font="Hack Nerd Font:Bold:14.0" \
+  label.font="Hack Nerd Font:Bold:13.0" \
+  icon.color=$TEXT label.color=$TEXT \
+  padding_left=4 padding_right=4 \
+  icon.padding_left=4 icon.padding_right=4 \
+  label.padding_left=4 label.padding_right=4
+
+# --- Left: AeroSpace workspaces ---
+sketchybar --add event aerospace_workspace_change
+for sid in 1 2 3 4 5; do
+  sketchybar --add item space.$sid left \
+    --subscribe space.$sid aerospace_workspace_change \
+    --set space.$sid \
+      label="$sid" \
+      background.color=$ACCENT background.corner_radius=5 background.height=20 \
+      background.drawing=off \
+      click_script="aerospace workspace $sid" \
+      script="$PLUGIN_DIR/aerospace.sh $sid"
+done
+
+sketchybar --add item front_app left \
+  --set front_app icon.drawing=off script="$PLUGIN_DIR/front_app.sh" \
+  --subscribe front_app front_app_switched
+
+# --- Right (added right-to-left) ---
+sketchybar --add item clock right \
+  --set clock update_freq=10 icon=󰥔 script="$PLUGIN_DIR/clock.sh"
+
+sketchybar --add item battery right \
+  --set battery update_freq=60 script="$PLUGIN_DIR/battery.sh" \
+  --subscribe battery power_source_change system_woke
+
+sketchybar --add item volume right \
+  --set volume script="$PLUGIN_DIR/volume.sh" \
+  --subscribe volume volume_change
+
+sketchybar --add item cpu right \
+  --set cpu update_freq=5 icon=󰻠 script="$PLUGIN_DIR/cpu.sh"
+
+sketchybar --update
+
+# Set initial workspace highlight
+sketchybar --trigger aerospace_workspace_change \
+  FOCUSED_WORKSPACE="$(aerospace list-workspaces --focused 2>/dev/null)"
