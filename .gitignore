@@ -9,3 +9,6 @@ __pycache__
 # Self-managed git repos that live in ~ but are NOT part of dotfiles.
 # (~/.claude has its own remote: github.com/tollefj/.claude)
 .claude/
+
+# Karabiner rewrites its own backups
+karabiner/.config/karabiner/automatic_backups/

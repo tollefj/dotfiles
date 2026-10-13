@@ -44,6 +44,8 @@ brew "hashicorp/tap/vault"
 brew "mostlygeek/llama-swap/llama-swap"
 # AeroSpace is an i3-like tiling window manager for macOS
 cask "nikitabobko/tap/aerospace"
+# Keyboard remapper (Tab as hyper, Caps Lock as ctrl/escape)
+cask "karabiner-elements"
 # Open source IDE for exploring and testing APIs
 cask "bruno"
 # Full TeX Live distribution with GUI applications

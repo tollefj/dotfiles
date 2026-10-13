@@ -1,0 +1,5 @@
+# Globs matched case-insensitively against identifier, bundle_id, title or app.
+# See candidates with: ~/.local/bin/menu-items list
+com.apple.TextInputMenuAgent
+com.apple.menuextra.clock
+Karabiner-Console-User-Server

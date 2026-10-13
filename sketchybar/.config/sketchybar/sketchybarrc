@@ -1,15 +1,15 @@
 #!/bin/bash
 PLUGIN_DIR="$CONFIG_DIR/plugins"
 
-# Catppuccin Mocha
-BASE=0xff1e1e2e
-TEXT=0xffcdd6f4
-ACCENT=0xff89b4fa
+source "$CONFIG_DIR/colors.sh"
 
 sketchybar --bar position=top height=32 y_offset=4 margin=10 \
   corner_radius=8 color=$BASE padding_left=8 padding_right=8
 
 sketchybar --default \
+  popup.background.color=$BASE popup.background.corner_radius=8 \
+  popup.background.border_width=1 popup.background.border_color=$SURFACE \
+  popup.y_offset=4 \
   icon.font="Hack Nerd Font:Bold:14.0" \
   label.font="Hack Nerd Font:Bold:13.0" \
   icon.color=$TEXT label.color=$TEXT \
@@ -19,7 +19,7 @@ sketchybar --default \
 
 # --- Left: AeroSpace workspaces ---
 sketchybar --add event aerospace_workspace_change
-for sid in 1 2 3 4 5; do
+for sid in 1 2 3; do
   sketchybar --add item space.$sid left \
     --subscribe space.$sid aerospace_workspace_change \
     --set space.$sid \
@@ -34,20 +34,93 @@ sketchybar --add item front_app left \
   --set front_app icon.drawing=off script="$PLUGIN_DIR/front_app.sh" \
   --subscribe front_app front_app_switched
 
+# Center items straddle the notch: cpu | ram | disk | notch gap | weather | balancing pad
+sketchybar --add graph cpu.graph center 40 \
+  --set cpu.graph graph.color=$ACCENT graph.fill_color=0x4489b4fa \
+    label.drawing=off icon.drawing=off padding_right=0 \
+    background.height=20 background.drawing=on background.color=0x00000000 \
+  --add item cpu center \
+  --set cpu update_freq=3 icon=󰻠 script="$PLUGIN_DIR/cpu.sh" \
+  --subscribe cpu mouse.clicked mouse.exited.global
+
+sketchybar --add item ram center \
+  --set ram update_freq=5 icon=󰍛 script="$PLUGIN_DIR/ram.sh" \
+  --subscribe ram mouse.clicked mouse.exited.global
+
+sketchybar --add item disk center \
+  --set disk update_freq=120 icon=󰋊 script="$PLUGIN_DIR/disk.sh" \
+    click_script="open -a 'Disk Utility'"
+
+sketchybar --add item notch_gap center \
+  --set notch_gap width=220 padding_left=0 padding_right=0 icon.drawing=off label.drawing=off
+
+sketchybar --add item weather center \
+  --set weather update_freq=3600 script="$PLUGIN_DIR/weather.sh" \
+  --subscribe weather system_woke mouse.clicked
+
+sketchybar --add item notch_pad center \
+  --set notch_pad width=168 padding_left=0 padding_right=0 icon.drawing=off label.drawing=off
+
 # --- Right (added right-to-left) ---
 sketchybar --add item clock right \
-  --set clock update_freq=10 icon=󰥔 script="$PLUGIN_DIR/clock.sh"
+  --set clock update_freq=10 icon.drawing=off script="$PLUGIN_DIR/clock.sh" \
+    click_script="$PLUGIN_DIR/clock_click.sh"
 
+spacer() {
+  sketchybar --add item "spacer.$1" right \
+    --set "spacer.$1" width=6 padding_left=0 padding_right=0 icon.drawing=off label.drawing=off
+}
+
+# Left click: popup/toggle, right click: settings, scroll on volume to adjust.
+spacer 1
 sketchybar --add item battery right \
   --set battery update_freq=60 script="$PLUGIN_DIR/battery.sh" \
-  --subscribe battery power_source_change system_woke
+  --subscribe battery power_source_change system_woke mouse.clicked mouse.exited.global
+for d in source time health; do
+  sketchybar --add item battery.$d popup.battery --set battery.$d icon.drawing=off
+done
+
+sketchybar --add event input_source_change AppleSelectedInputSourcesChangedNotification
+spacer 4
+sketchybar --add item keyboard right \
+  --set keyboard icon=󰌌 script="$PLUGIN_DIR/keyboard.sh" \
+  --subscribe keyboard input_source_change system_woke
 
 sketchybar --add item volume right \
   --set volume script="$PLUGIN_DIR/volume.sh" \
-  --subscribe volume volume_change
+  --subscribe volume volume_change mouse.clicked mouse.scrolled
 
-sketchybar --add item cpu right \
-  --set cpu update_freq=5 icon=󰻠 script="$PLUGIN_DIR/cpu.sh"
+spacer 2
+sketchybar --add item vpn right \
+  --set vpn update_freq=15 script="$PLUGIN_DIR/vpn.sh" \
+  --subscribe vpn system_woke mouse.clicked
+
+sketchybar --add item wifi right \
+  --set wifi update_freq=30 script="$PLUGIN_DIR/wifi.sh" \
+  --subscribe wifi wifi_change system_woke mouse.clicked mouse.exited.global \
+  --add item wifi.ip popup.wifi --set wifi.ip icon="IP" \
+  --add item wifi.router popup.wifi --set wifi.router icon="Router"
+
+spacer 3
+sketchybar --add item menu_items right \
+  --set menu_items icon=󰍜 label.drawing=off update_freq=15 script="$PLUGIN_DIR/menu_items.sh" \
+  --subscribe menu_items mouse.clicked mouse.exited.global front_app_switched system_woke
+
+for alias in "${MENU_ALIASES[@]}"; do
+  sketchybar --add alias "$alias" right --set "$alias" alias.color=$TEXT padding_left=0 padding_right=0
+done
+
+# --- Semantic groups ---
+group() {
+  local name=$1 color=$2; shift 2
+  sketchybar --add bracket "$name" "$@" \
+    --set "$name" background.color=$color background.corner_radius=6 background.height=24
+}
+group grp.system $MAUVE_BG cpu.graph cpu ram disk
+group grp.network $BLUE_BG wifi vpn
+group grp.input $PEACH_BG volume keyboard
+group grp.power $GREEN_BG battery
+group grp.time $SURFACE clock
 
 sketchybar --update
 
