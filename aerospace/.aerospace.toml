@@ -2,6 +2,8 @@ config-version = 2
 persistent-workspaces = ["1", "2", "3"]
 
 start-at-login = true
+default-root-container-layout = 'tiles'
+default-root-container-orientation = 'auto'
 after-startup-command = [
   'exec-and-forget borders active_color=0xffe1e3e4 inactive_color=0xff494d64 width=5.0',
   'exec-and-forget sketchybar'
@@ -11,38 +13,96 @@ exec-on-workspace-change = ['/bin/bash', '-c',
 ]
 gaps.inner.horizontal = 10
 gaps.inner.vertical   = 10
-gaps.outer.left = 10
-gaps.outer.right = 10
-gaps.outer.top = [{ monitor.main = 40 }, 10]  # room for SketchyBar
-gaps.outer.bottom = 10
+gaps.outer.left = 0
+gaps.outer.right = 0
+gaps.outer.top = [{ monitor.main = 4 }, 0]  # room for SketchyBar
+gaps.outer.bottom = 0
 
 [mode.main.binding]
-# Hyper = ctrl-alt-cmd, sent by holding Tab (Karabiner)
-ctrl-alt-cmd-t = 'exec-and-forget open -a iTerm'
-ctrl-alt-cmd-y = 'exec-and-forget open -a Waterfox'
-ctrl-alt-cmd-h = 'focus left'
-ctrl-alt-cmd-j = 'focus down'
-ctrl-alt-cmd-k = 'focus up'
-ctrl-alt-cmd-l = 'focus right'
+# Hold Tab = alt-cmd-shift (Karabiner); Tab + Caps Lock adds ctrl
+alt-cmd-shift-t = '''exec-and-forget ~/.config/aerospace/focus-or-new.sh com.googlecode.iterm2 "osascript -e 'tell application \"iTerm\" to create window with default profile'"'''
+alt-cmd-shift-y = '''exec-and-forget ~/.config/aerospace/focus-or-new.sh net.waterfox.waterfox "/Applications/Waterfox.app/Contents/MacOS/waterfox --new-window"'''
+alt-cmd-shift-o = '''exec-and-forget ~/.config/aerospace/focus-or-new.sh md.obsidian "osascript -e 'tell application \"System Events\" to keystroke \"n\" using {command down, shift down}'"'''
+alt-cmd-shift-c = 'exec-and-forget open -a "Claude"'
+alt-cmd-shift-s = 'exec-and-forget open -a "Slack"'
+alt-cmd-shift-e = '''exec-and-forget osascript -e 'tell application "Finder" to make new Finder window' -e 'tell application "Finder" to activate''''
+alt-cmd-shift-m = 'exec-and-forget open -a "Mail"'
+alt-cmd-shift-i = 'exec-and-forget open -a "Microsoft Teams"'
+alt-cmd-shift-w = 'close'
+alt-cmd-shift-h = 'focus left'
+alt-cmd-shift-j = 'focus down'
+alt-cmd-shift-k = 'exec-and-forget open -a "Microsoft Outlook"'
+alt-cmd-shift-l = 'focus right'
 ctrl-alt-cmd-shift-h = 'move left'
 ctrl-alt-cmd-shift-j = 'move down'
 ctrl-alt-cmd-shift-k = 'move up'
 ctrl-alt-cmd-shift-l = 'move right'
-ctrl-alt-cmd-f = 'fullscreen'
-ctrl-alt-cmd-9 = 'layout tiles horizontal vertical'
-ctrl-alt-cmd-0 = 'layout accordion horizontal vertical'
-ctrl-alt-cmd-b = 'balance-sizes'
-ctrl-alt-cmd-comma = 'resize smart -50'
-ctrl-alt-cmd-period = 'resize smart +50'
-ctrl-alt-cmd-n = 'move-node-to-monitor --wrap-around --focus-follows-window next'
-ctrl-alt-cmd-tab = 'workspace-back-and-forth'
-ctrl-alt-cmd-1 = 'workspace 1'
-ctrl-alt-cmd-2 = 'workspace 2'
-ctrl-alt-cmd-3 = 'workspace 3'
+alt-cmd-shift-f = 'fullscreen'
+alt-cmd-shift-0 = 'layout tiles horizontal vertical'
+alt-cmd-shift-b = 'balance-sizes'
+alt-cmd-shift-comma = 'resize smart -50'
+alt-cmd-shift-period = 'resize smart +50'
+alt-cmd-shift-n = 'move-node-to-monitor --wrap-around --focus-follows-window next'
+alt-cmd-shift-1 = 'workspace 1'
+alt-cmd-shift-2 = 'workspace 2'
+alt-cmd-shift-3 = 'workspace 3'
+alt-cmd-shift-4 = 'workspace 4'
+alt-cmd-shift-5 = 'workspace 5'
+alt-cmd-shift-6 = 'workspace 6'
+alt-cmd-shift-7 = 'workspace 7'
+alt-cmd-shift-8 = 'workspace 8'
+alt-cmd-shift-9 = 'workspace 9'
 ctrl-alt-cmd-shift-1 = 'move-node-to-workspace 1'
 ctrl-alt-cmd-shift-2 = 'move-node-to-workspace 2'
 ctrl-alt-cmd-shift-3 = 'move-node-to-workspace 3'
+ctrl-alt-cmd-shift-4 = 'move-node-to-workspace 4'
+ctrl-alt-cmd-shift-5 = 'move-node-to-workspace 5'
+ctrl-alt-cmd-shift-6 = 'move-node-to-workspace 6'
+ctrl-alt-cmd-shift-7 = 'move-node-to-workspace 7'
+ctrl-alt-cmd-shift-8 = 'move-node-to-workspace 8'
+ctrl-alt-cmd-shift-9 = 'move-node-to-workspace 9'
+
+[[on-window-detected]]
+if = 'true'
+check-further-callbacks = true
+run = 'exec-and-forget ~/.config/aerospace/master-stack.sh'
 
 [[on-window-detected]]
 if.app-id = 'com.googlecode.iterm2'
 run = 'move-node-to-workspace 1'
+
+[[on-window-detected]]
+if.app-id = 'com.anthropic.claudefordesktop'
+run = 'move-node-to-workspace 1'
+
+[[on-window-detected]]
+if.app-id = 'net.waterfox.waterfox'
+run = 'move-node-to-workspace 2'
+
+[[on-window-detected]]
+if.app-id = 'com.microsoft.teams2'
+run = 'move-node-to-workspace 3'
+
+[[on-window-detected]]
+if.app-id = 'com.microsoft.Outlook'
+run = 'move-node-to-workspace 3'
+
+[[on-window-detected]]
+if.app-id = 'com.tinyspeck.slackmacgap'
+run = 'move-node-to-workspace 3'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.mail'
+run = 'move-node-to-workspace 3'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.systempreferences'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.finder'
+run = 'layout floating'
+
+[[on-window-detected]]
+if = 'true'
+run = 'move-node-to-workspace 2'

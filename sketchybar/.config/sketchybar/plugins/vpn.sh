@@ -7,7 +7,7 @@ case "$SENDER" in
     exit 0 ;;
 esac
 
-SERVICES=$(scutil --nc list | awk -F'"' '/\(Connected\)/ { print $2 }' | paste -sd, - | sed 's/,/, /g')
+SERVICES=$(scutil --nc list | awk -F'"' '/\(Connected\)/ { split($2, w, " "); print w[1] }' | paste -sd, - | sed 's/,/, /g')
 TUNNEL=$(ifconfig | awk '/^utun/ { i = 1 } /^[a-z]/ && !/^utun/ { i = 0 } i && /inet / { print "up"; exit }')
 
 if [ -n "$SERVICES" ]; then
