@@ -19,15 +19,17 @@ sketchybar --default \
 
 # --- Left: AeroSpace workspaces ---
 sketchybar --add event aerospace_workspace_change
-for sid in 1 2 3; do
+for sid in 1 2 3 4 5; do
   sketchybar --add item space.$sid left \
     --subscribe space.$sid aerospace_workspace_change \
     --set space.$sid \
-      label="$sid" \
+      label="$sid" update_freq=5 \
       background.color=$ACCENT background.corner_radius=5 background.height=20 \
       background.drawing=off \
       click_script="aerospace workspace $sid" \
-      script="$PLUGIN_DIR/aerospace.sh $sid"
+      script="$PLUGIN_DIR/aerospace.sh $sid" \
+    --add item space.$sid.name popup.space.$sid \
+    --set space.$sid.name icon.drawing=off
 done
 
 sketchybar --add item front_app left \
@@ -111,16 +113,21 @@ for alias in "${MENU_ALIASES[@]}"; do
 done
 
 # --- Semantic groups ---
+# group <name> <fill> <border> <items...>   fill/border: a color from colors.sh, or "none"
 group() {
-  local name=$1 color=$2; shift 2
+  local name=$1 fill=$2 border=$3; shift 3
+  local fill_args=(background.color=$fill) border_args=(background.border_color=$border background.border_width=1)
+  [ "$fill" = none ] && fill_args=(background.color=0x00000000)
+  [ "$border" = none ] && border_args=(background.border_width=0)
   sketchybar --add bracket "$name" "$@" \
-    --set "$name" background.color=$color background.corner_radius=6 background.height=24
+    --set "$name" "${fill_args[@]}" "${border_args[@]}" \
+    background.corner_radius=6 background.height=24
 }
-group grp.system $MAUVE_BG cpu.graph cpu ram disk
-group grp.network $BLUE_BG wifi vpn
-group grp.input $PEACH_BG volume keyboard
-group grp.power $GREEN_BG battery
-group grp.time $SURFACE clock
+group grp.system  none     none  cpu.graph cpu ram disk
+group grp.network $BLUE_BG none  wifi vpn
+group grp.input   $PEACH_BG none volume keyboard
+group grp.power   $GREEN_BG none battery
+group grp.time    $SURFACE none  clock
 
 sketchybar --update
 
