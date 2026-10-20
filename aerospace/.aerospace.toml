@@ -1,5 +1,5 @@
 config-version = 2
-persistent-workspaces = ["1", "2", "3"]
+persistent-workspaces = ["1", "2", "3", "4", "5", "6"]
 
 start-at-login = true
 default-root-container-layout = 'tiles'
@@ -37,7 +37,8 @@ ctrl-alt-cmd-shift-j = 'move down'
 ctrl-alt-cmd-shift-k = 'move up'
 ctrl-alt-cmd-shift-l = 'move right'
 alt-cmd-shift-f = 'fullscreen'
-alt-cmd-shift-0 = 'layout tiles horizontal vertical'
+alt-cmd-shift-r = 'layout tiles horizontal vertical'
+alt-cmd-shift-a = 'exec-and-forget ~/.config/aerospace/tile-all.sh'
 alt-cmd-shift-b = 'balance-sizes'
 alt-cmd-shift-comma = 'resize smart -50'
 alt-cmd-shift-period = 'resize smart +50'
@@ -48,9 +49,9 @@ alt-cmd-shift-3 = 'workspace 3'
 alt-cmd-shift-4 = 'workspace 4'
 alt-cmd-shift-5 = 'workspace 5'
 alt-cmd-shift-6 = 'workspace 6'
-alt-cmd-shift-7 = 'workspace 7'
-alt-cmd-shift-8 = 'workspace 8'
-alt-cmd-shift-9 = 'workspace 9'
+alt-cmd-shift-0 = 'exec-and-forget ~/.config/aerospace/position-single.sh center'
+alt-cmd-shift-8 = 'exec-and-forget ~/.config/aerospace/position-single.sh left'
+alt-cmd-shift-9 = 'exec-and-forget ~/.config/aerospace/position-single.sh right'
 ctrl-alt-cmd-shift-1 = 'move-node-to-workspace 1'
 ctrl-alt-cmd-shift-2 = 'move-node-to-workspace 2'
 ctrl-alt-cmd-shift-3 = 'move-node-to-workspace 3'
@@ -76,7 +77,7 @@ run = 'move-node-to-workspace 1'
 
 [[on-window-detected]]
 if.app-id = 'net.waterfox.waterfox'
-run = 'move-node-to-workspace 2'
+run = 'exec-and-forget ~/.config/aerospace/waterfox-workspace.sh'
 
 [[on-window-detected]]
 if.app-id = 'com.microsoft.teams2'

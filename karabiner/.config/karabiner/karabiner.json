@@ -1,77 +1,85 @@
 {
-  "profiles": [
-    {
-      "name": "Default profile",
-      "selected": true,
-      "virtual_hid_keyboard": {
-        "keyboard_type_v2": "iso"
-      },
-      "complex_modifications": {
-        "parameters": {
-          "basic.to_if_alone_timeout_milliseconds": 500
-        },
-        "rules": [
-          {
-            "description": "Caps Lock: hold = left ctrl, tap = escape",
-            "manipulators": [
-              {
-                "type": "basic",
-                "from": {
-                  "key_code": "caps_lock",
-                  "modifiers": {
-                    "optional": [
-                      "any"
-                    ]
-                  }
-                },
-                "to": [
-                  {
-                    "key_code": "left_control"
-                  }
-                ],
-                "to_if_alone": [
-                  {
-                    "key_code": "escape"
-                  }
+    "profiles": [
+        {
+            "complex_modifications": {
+                "parameters": { "basic.to_if_alone_timeout_milliseconds": 500 },
+                "rules": [
+                    {
+                        "description": "Caps Lock: hold = left ctrl, tap = escape",
+                        "manipulators": [
+                            {
+                                "from": {
+                                    "key_code": "caps_lock",
+                                    "modifiers": { "optional": ["any"] }
+                                },
+                                "to": [{ "key_code": "left_control" }],
+                                "to_if_alone": [{ "key_code": "escape" }],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
+                        "description": "Tab: hold = alt-cmd-shift, tap = tab",
+                        "manipulators": [
+                            {
+                                "from": {
+                                    "key_code": "tab",
+                                    "modifiers": { "optional": ["any"] }
+                                },
+                                "parameters": { "basic.to_if_alone_timeout_milliseconds": 300 },
+                                "to": [
+                                    {
+                                        "key_code": "left_command",
+                                        "modifiers": ["left_option", "left_shift"]
+                                    }
+                                ],
+                                "to_if_alone": [{ "key_code": "tab" }],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
+                        "description": "Disable native hide and minimize (cmd+h, cmd+m, cmd+opt+h, cmd+opt+m)",
+                        "manipulators": [
+                            {
+                                "from": {
+                                    "key_code": "h",
+                                    "modifiers": { "mandatory": ["command"] }
+                                },
+                                "to": [{ "key_code": "vk_none" }],
+                                "type": "basic"
+                            },
+                            {
+                                "from": {
+                                    "key_code": "m",
+                                    "modifiers": { "mandatory": ["command"] }
+                                },
+                                "to": [{ "key_code": "vk_none" }],
+                                "type": "basic"
+                            },
+                            {
+                                "from": {
+                                    "key_code": "h",
+                                    "modifiers": { "mandatory": ["command", "option"] }
+                                },
+                                "to": [{ "key_code": "vk_none" }],
+                                "type": "basic"
+                            },
+                            {
+                                "from": {
+                                    "key_code": "m",
+                                    "modifiers": { "mandatory": ["command", "option"] }
+                                },
+                                "to": [{ "key_code": "vk_none" }],
+                                "type": "basic"
+                            }
+                        ]
+                    }
                 ]
-              }
-            ]
-          },
-          {
-            "description": "Tab: hold = alt-cmd-shift, tap = tab",
-            "manipulators": [
-              {
-                "type": "basic",
-                "from": {
-                  "key_code": "tab",
-                  "modifiers": {
-                    "optional": [
-                      "any"
-                    ]
-                  }
-                },
-                "to": [
-                  {
-                    "key_code": "left_command",
-                    "modifiers": [
-                      "left_option",
-                      "left_shift"
-                    ]
-                  }
-                ],
-                "to_if_alone": [
-                  {
-                    "key_code": "tab"
-                  }
-                ],
-                "parameters": {
-                  "basic.to_if_alone_timeout_milliseconds": 300
-                }
-              }
-            ]
-          }
-        ]
-      }
-    }
-  ]
+            },
+            "name": "Default profile",
+            "selected": true,
+            "virtual_hid_keyboard": { "keyboard_type_v2": "iso" }
+        }
+    ]
 }

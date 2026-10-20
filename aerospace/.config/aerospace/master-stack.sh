@@ -4,6 +4,14 @@
 sleep 0.05
 
 for workspace in $(aerospace list-workspaces --monitor all --empty no); do
+  while IFS='|' read -r id parent_layout; do
+    aerospace fullscreen off --window-id "$id" 2>/dev/null
+    case $parent_layout in
+      h_accordion) aerospace layout h_tiles --window-id "$id" ;;
+      v_accordion) aerospace layout v_tiles --window-id "$id" ;;
+    esac
+  done < <(aerospace list-windows --workspace "$workspace" --format '%{window-id}|%{window-parent-container-layout}')
+
   root_layout=$(aerospace list-windows --workspace "$workspace" --format '%{workspace-root-container-layout}' | head -1)
   [ "$root_layout" = "h_tiles" ] || continue
 

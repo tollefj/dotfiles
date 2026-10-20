@@ -53,7 +53,7 @@ workspace=$(aerospace list-workspaces --focused)
 existing_windows=$(list_app_windows)
 
 wait_for_modifier_release
-eval "$new_window_command"
+eval "$new_window_command" &
 
 for _ in $(seq 100); do
   resolve_pid
