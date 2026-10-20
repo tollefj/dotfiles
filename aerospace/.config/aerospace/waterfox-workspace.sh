@@ -6,7 +6,7 @@
 
 profile_workspaces=(
   "q9V5tM8C.Profile 2:2"
-  "26886r2e.default-release:5"
+  "26886r2e.default-release:6"
 )
 
 read -r window_id window_pid < <(

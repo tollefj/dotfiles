@@ -13,6 +13,7 @@ workspace_name() {
     3) echo Chat ;;
     4) echo Mail ;;
     5) echo Notes ;;
+    6) echo jobb ;;
     *) echo "Workspace $1" ;;
   esac
 }

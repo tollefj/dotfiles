@@ -11,7 +11,7 @@ gaps.inner.horizontal = 10
 gaps.inner.vertical   = 10
 gaps.outer.left = 0
 gaps.outer.right = 0
-gaps.outer.top = [{ monitor.main = 4 }, 0]  # room for SketchyBar
+gaps.outer.top = [{ monitor.built-in = 4 }, 40]  # room for SketchyBar
 gaps.outer.bottom = 0
 
 [mode.main.binding]
@@ -52,15 +52,12 @@ alt-cmd-shift-6 = 'workspace 6'
 alt-cmd-shift-0 = 'exec-and-forget ~/.config/aerospace/position-single.sh center'
 alt-cmd-shift-8 = 'exec-and-forget ~/.config/aerospace/position-single.sh left'
 alt-cmd-shift-9 = 'exec-and-forget ~/.config/aerospace/position-single.sh right'
-ctrl-alt-cmd-shift-1 = 'move-node-to-workspace 1'
-ctrl-alt-cmd-shift-2 = 'move-node-to-workspace 2'
-ctrl-alt-cmd-shift-3 = 'move-node-to-workspace 3'
-ctrl-alt-cmd-shift-4 = 'move-node-to-workspace 4'
-ctrl-alt-cmd-shift-5 = 'move-node-to-workspace 5'
-ctrl-alt-cmd-shift-6 = 'move-node-to-workspace 6'
-ctrl-alt-cmd-shift-7 = 'move-node-to-workspace 7'
-ctrl-alt-cmd-shift-8 = 'move-node-to-workspace 8'
-ctrl-alt-cmd-shift-9 = 'move-node-to-workspace 9'
+ctrl-alt-cmd-shift-1 = 'move-node-to-workspace --focus-follows-window 1'
+ctrl-alt-cmd-shift-2 = 'move-node-to-workspace --focus-follows-window 2'
+ctrl-alt-cmd-shift-3 = 'move-node-to-workspace --focus-follows-window 3'
+ctrl-alt-cmd-shift-4 = 'move-node-to-workspace --focus-follows-window 4'
+ctrl-alt-cmd-shift-5 = 'move-node-to-workspace --focus-follows-window 5'
+ctrl-alt-cmd-shift-6 = 'move-node-to-workspace --focus-follows-window 6'
 
 [[on-window-detected]]
 if = 'true'

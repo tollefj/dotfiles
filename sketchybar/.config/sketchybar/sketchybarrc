@@ -3,7 +3,7 @@ PLUGIN_DIR="$CONFIG_DIR/plugins"
 
 source "$CONFIG_DIR/colors.sh"
 
-sketchybar --bar position=top height=32 y_offset=4 margin=10 \
+sketchybar --bar display=all position=top height=32 y_offset=4 margin=10 \
   corner_radius=8 color=$BASE padding_left=8 padding_right=8
 
 sketchybar --default \
