@@ -40,6 +40,7 @@ alt-cmd-shift-f = 'fullscreen'
 alt-cmd-shift-r = 'layout tiles horizontal vertical'
 alt-cmd-shift-a = 'exec-and-forget ~/.config/aerospace/tile-all.sh'
 alt-cmd-shift-b = 'balance-sizes'
+alt-cmd-shift-7 = 'exec-and-forget ~/.config/aerospace/fix-workspaces.sh'
 alt-cmd-shift-comma = 'resize smart -50'
 alt-cmd-shift-period = 'resize smart +50'
 alt-cmd-shift-n = 'move-node-to-monitor --wrap-around --focus-follows-window next'
@@ -103,6 +104,18 @@ run = 'move-node-to-workspace 5'
 [[on-window-detected]]
 if.app-id = 'com.apple.Preview'
 run = 'move-node-to-workspace 5'
+
+[[on-window-detected]]
+if.app-id = 'com.microsoft.Word'
+run = 'move-node-to-workspace 6'
+
+[[on-window-detected]]
+if.app-id = 'com.microsoft.Powerpoint'
+run = 'move-node-to-workspace 6'
+
+[[on-window-detected]]
+if.app-id = 'com.microsoft.Excel'
+run = 'move-node-to-workspace 6'
 
 [[on-window-detected]]
 if.app-id = 'com.apple.systempreferences'

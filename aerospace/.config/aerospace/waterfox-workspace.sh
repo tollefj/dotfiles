@@ -5,8 +5,8 @@
 [ -d /tmp/aerospace-focus-or-new.lock ] && exit
 
 profile_workspaces=(
-  "q9V5tM8C.Profile 2:2"
-  "26886r2e.default-release:6"
+  "q9V5tM8C.Profile 2:6"
+  "26886r2e.default-release:2"
 )
 
 read -r window_id window_pid < <(
