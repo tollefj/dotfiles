@@ -82,6 +82,10 @@ for d in source time health; do
   sketchybar --add item battery.$d popup.battery --set battery.$d icon.drawing=off
 done
 
+sketchybar --add item amphetamine right \
+  --set amphetamine update_freq=30 script="$PLUGIN_DIR/amphetamine.sh" \
+  --subscribe amphetamine system_woke mouse.clicked
+
 sketchybar --add event input_source_change AppleSelectedInputSourcesChangedNotification
 spacer 4
 sketchybar --add item keyboard right \
@@ -126,7 +130,7 @@ group() {
 group grp.system  none     none  cpu.graph cpu ram disk
 group grp.network $BLUE_BG none  wifi vpn
 group grp.input   $PEACH_BG none volume keyboard
-group grp.power   $GREEN_BG none battery
+group grp.power   $GREEN_BG none amphetamine battery
 group grp.time    $SURFACE none  clock
 
 sketchybar --update
