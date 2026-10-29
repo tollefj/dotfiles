@@ -1,75 +1,69 @@
-# Dotfiles on Linux
+# Dotfiles on Ubuntu
 
-Assumes Ubuntu/Debian.
+Your config files live in one git repo. `stow` symlinks them into `$HOME`, so editing `~/.zshrc` edits the file in the repo.
 
-## 1. Install
-
-```bash
-sudo apt update
-sudo apt install git stow make zsh tmux neovim fzf ripgrep fd-find tree zsh-syntax-highlighting
-chsh -s "$(which zsh)"
-```
-
-On Debian `fd` is called `fdfind`. Add `alias fd=fdfind` to your aliases.
-
-## 2. Layout
+## Layout
 
 Each top-level folder is a package. Files inside mirror their path under `$HOME`:
 
 ```
 dotfiles/
   Makefile
-  zsh/.zshrc
-  git/.gitconfig
-  tmux/.config/tmux/tmux.conf
-  nvim/.config/nvim/init.lua
+  setup.sh
+  zsh/.zshrc                       -> ~/.zshrc
+  git/.gitconfig                   -> ~/.gitconfig
+  git/.config/git/ignore           -> ~/.config/git/ignore
+  starship/.config/starship.toml   -> ~/.config/starship.toml
 ```
 
-## 3. Makefile
+## First setup
 
-```make
-DOTFILES := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
-STOW     := stow --dir="$(DOTFILES)" --target="$(HOME)"
-PACKAGES := $(patsubst %/,%,$(wildcard */))
-
-.PHONY: link adopt unlink
-
-link:
-	@$(STOW) --restow $(PACKAGES)
-
-adopt:
-	@$(STOW) --adopt --restow $(PACKAGES)
-
-unlink:
-	@$(STOW) --delete $(PACKAGES)
-```
-
-## 4. Create your repo
-
-Start empty, add the Makefile above, then move your existing configs in:
+1. Copy the example folder to `~/dotfiles` and make it your own repo:
 
 ```bash
-mkdir ~/dotfiles && cd ~/dotfiles && git init
-mkdir -p zsh git tmux/.config nvim/.config
-mv ~/.zshrc zsh/
-mv ~/.gitconfig git/
-mv ~/.config/tmux tmux/.config/
-mv ~/.config/nvim nvim/.config/
-make
+cd ~/dotfiles
+git init
+git add -A && git commit -m "Initial dotfiles"
 ```
 
-Only move what you actually have. `make` creates the symlinks back into `$HOME`. Then push it to your own GitHub repo.
+2. Put your name and email in `git/.gitconfig`.
+3. Run `make install`, then log out and back in.
+4. Set your terminal font to `JetBrainsMono Nerd Font`.
+5. Push the repo to your own GitHub.
 
-## 5. Daily use
+If you already have a `~/.zshrc` or `~/.gitconfig`, stow will refuse to overwrite it. Move it away first, or run `make adopt` to pull it into the repo and check with `git diff`.
 
-Files in `$HOME` are symlinks to the repo, so editing `~/.zshrc` edits the repo. Sync with git commit, push and pull.
+## What you get
 
-New app: move its config into a new package folder the same way and run `make`.
+- zsh with oh-my-zsh and the starship prompt
+- grey suggestions from history while typing, press `→` to accept
+- type the start of a command and press `↑` to cycle through matching history
+- `Ctrl+R` fuzzy history search (fzf)
+- syntax highlighting: commands turn red if they don't exist
+- press `Esc` twice to put `sudo` in front of the current command
+- unknown commands suggest which apt package provides them
+- `cd`, `ls`, `cat` etc work as normal
+- `uv` for Python, `mise` for node and other runtimes, `direnv` for per-project env vars
+- `gh`, `jq`, `btop`
 
-## 6. Another machine
+Machine-specific settings go in `~/.zshrc.local`, which is not in the repo.
+
+## Daily use
+
+Edit configs in place. Commit and push when you're happy.
+
+New app: make a package folder with the file at its `$HOME` path, e.g. `ghostty/.config/ghostty/config`, then run `make`.
+
+## Another machine
 
 ```bash
 git clone <your-repo-url> ~/dotfiles && cd ~/dotfiles
-make adopt     # takes any existing configs into the repo, then symlinks
-git diff       # review; `git checkout -- <file>` to keep the repo version
+make install
 ```
+
+## Make targets
+
+- `make install` installs tools and links everything
+- `make` links again after adding a new file
+- `make adopt` pulls existing files in `$HOME` into the repo
+- `make unlink` removes all symlinks
